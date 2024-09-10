@@ -5,10 +5,10 @@ cmake_minimum_required(VERSION 3.24.1)
 
 # This tells cmake we have goodies in the /cmake folder
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
-include (HyperDistortionVersion)
+include (PampleJuceVersion)
 
 # Configures universal binaries and decides which version of macOS to support
-include(HyperDistortionMacOS)
+include(PampleJuceMacOS)
 
 # Couple tweaks that IMO should be JUCE defaults
 include(JUCEDefaults)
@@ -144,7 +144,7 @@ target_link_libraries(SharedCode
 target_link_libraries("${PROJECT_NAME}" PRIVATE SharedCode)
 
 # IPP support, comment out to disable
-include(HyperDistortionIPP)
+include(PampleJuceIPP)
 
 # Everything related to the tests target
 include(Tests)
