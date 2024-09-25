@@ -134,7 +134,7 @@ private:
     juce::dsp::DelayLine<float> haasDelay; // 5-35  ms
     juce::dsp::Chorus<float> chorus;
     // juce::dsp::WaveShaper<float> waveshaper;
-    juce::dsp::Convolution<float> convolution; // ir for cabinets or reverb?
+    juce::dsp::Convolution convolution; // ir for cabinets or reverb?
 
 
 
