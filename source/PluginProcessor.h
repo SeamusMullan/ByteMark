@@ -2,6 +2,7 @@
 
 #include <juce_audio_processors/juce_audio_processors.h>
 #include <juce_dsp/juce_dsp.h>
+#include <atomic>
 
 #if (MSVC)
 #include "ipps.h"
@@ -12,6 +13,21 @@ class PluginProcessor : public juce::AudioProcessor
 public:
     PluginProcessor();
     ~PluginProcessor() override;
+
+    // FIFO for audio visualization
+    class FifoQueue
+    {
+    public:
+        void push(const juce::AudioBuffer<float>& buffer);
+        bool pull(juce::AudioBuffer<float>& buffer);
+
+    private:
+        static constexpr int bufferSize = 48000; // 1 second buffer at 48kHz
+        juce::AbstractFifo fifo { bufferSize };
+        juce::AudioBuffer<float> circularBuffer { 2, bufferSize };
+    };
+
+    FifoQueue fifoQueue;
 
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
     void releaseResources() override;
@@ -136,6 +152,11 @@ private:
     // juce::dsp::WaveShaper<float> waveshaper;
     juce::dsp::Convolution convolution; // ir for cabinets or reverb?
 
+
+    // visualiser
+
+    juce::AudioBuffer<float> midBuffer;
+    juce::AudioBuffer<float> sideBuffer;
 
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PluginProcessor)

@@ -89,18 +89,23 @@ void PluginProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
     juce::dsp::ProcessSpec spec{};
     spec.sampleRate = sampleRate;
-    spec.numChannels = samplesPerBlock;
     spec.numChannels = getTotalNumInputChannels();
+    spec.maximumBlockSize = samplesPerBlock;
 
     preLP.prepare(spec);
     preHP.prepare(spec);
-
-    // haasDelay.reset();
     haasDelay.prepare(spec);
     chorus.prepare(spec);
     convolution.prepare(spec);
-
     compressor.prepare(spec);
+
+    // Reset DSP modules
+    preLP.reset();
+    preHP.reset();
+    haasDelay.reset();
+    chorus.reset();
+    convolution.reset();
+    compressor.reset();
 
     juce::ignoreUnused (sampleRate, samplesPerBlock);
 }
@@ -133,6 +138,48 @@ bool PluginProcessor::isBusesLayoutSupported (const BusesLayout& layouts) const
   #endif
 }
 
+void PluginProcessor::FifoQueue::push(const juce::AudioBuffer<float>& buffer)
+{
+    int start1, size1, start2, size2;
+    fifo.prepareToWrite(buffer.getNumSamples(), start1, size1, start2, size2);
+
+    if (size1 > 0)
+        circularBuffer.copyFrom(0, start1, buffer, 0, 0, size1);
+    if (size2 > 0)
+        circularBuffer.copyFrom(0, start2, buffer, 0, size1, size2);
+
+    if (size1 > 0)
+        circularBuffer.copyFrom(1, start1, buffer, 1, 0, size1);
+    if (size2 > 0)
+        circularBuffer.copyFrom(1, start2, buffer, 1, size1, size2);
+
+    fifo.finishedWrite(size1 + size2);
+}
+
+bool PluginProcessor::FifoQueue::pull(juce::AudioBuffer<float>& buffer)
+{
+    int start1, size1, start2, size2;
+    fifo.prepareToRead(buffer.getNumSamples(), start1, size1, start2, size2);
+
+    if (size1 + size2 < buffer.getNumSamples())
+        return false;
+
+    if (size1 > 0)
+        buffer.copyFrom(0, 0, circularBuffer, 0, start1, size1);
+    if (size2 > 0)
+        buffer.copyFrom(0, size1, circularBuffer, 0, start2, size2);
+
+    if (size1 > 0)
+        buffer.copyFrom(1, 0, circularBuffer, 1, start1, size1);
+    if (size2 > 0)
+        buffer.copyFrom(1, size1, circularBuffer, 1, start2, size2);
+
+    fifo.finishedRead(size1 + size2);
+    return true;
+}
+
+
+
 void PluginProcessor::processBlock (juce::AudioBuffer<float>& buffer,
                                               juce::MidiBuffer& midiMessages)
 {
@@ -142,17 +189,19 @@ void PluginProcessor::processBlock (juce::AudioBuffer<float>& buffer,
     auto totalNumInputChannels  = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
 
+    // Clear any extra output channels
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
 
+    // Apply your audio processing here
+    // For example:
+    // applyGain(buffer);
+    // applyEffects(buffer);
 
-    for (int channel = 0; channel < totalNumInputChannels; ++channel)
-    {
-        auto* channelData = buffer.getWritePointer (channel);
-        juce::ignoreUnused (channelData);
-        // .do something to the data.
-    }
+    // Now push the processed buffer into the FIFO
+    fifoQueue.push(buffer);
 }
+
 
 //==============================================================================
 bool PluginProcessor::hasEditor() const
