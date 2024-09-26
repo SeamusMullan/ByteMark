@@ -30,6 +30,11 @@ void SpectrumAnalyzer::resized()
     // No need for layout in this component
 }
 
+void SpectrumAnalyzer::setVisualizerSmoothingValue(float val)
+{
+    visualizerSmoothingValue = val;
+}
+
 void SpectrumAnalyzer::pushBuffer(const juce::AudioBuffer<float>& buffer)
 {
     auto numSamples = buffer.getNumSamples();
@@ -166,7 +171,7 @@ void SpectrumAnalyzer::applySmoothing()
     static std::vector<float> previousMidSpectrum(midSpectrum.size(), 0.0f);
     static std::vector<float> previousSideSpectrum(sideSpectrum.size(), 0.0f);
 
-    float smoothingFactor = 0.7f; // Adjust between 0.0f (no smoothing) and 1.0f (full smoothing)
+    float smoothingFactor = 0.5f; // Adjust between 0.0f (no smoothing) and 1.0f (full smoothing)
 
     for (size_t i = 0; i < midSpectrum.size(); ++i)
     {

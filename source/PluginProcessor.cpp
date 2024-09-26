@@ -98,6 +98,9 @@ void PluginProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
     chorus.prepare(spec);
     convolution.prepare(spec);
     compressor.prepare(spec);
+    lowGain.prepare(spec);
+    midGain.prepare(spec);
+    highGain.prepare(spec);
 
     // Reset DSP modules
     preLP.reset();
@@ -106,6 +109,9 @@ void PluginProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
     chorus.reset();
     convolution.reset();
     compressor.reset();
+    lowGain.reset();
+    midGain.reset();
+    highGain.reset();
 
     juce::ignoreUnused (sampleRate, samplesPerBlock);
 }
@@ -177,6 +183,8 @@ bool PluginProcessor::FifoQueue::pull(juce::AudioBuffer<float>& buffer)
     fifo.finishedRead(size1 + size2);
     return true;
 }
+
+
 
 
 

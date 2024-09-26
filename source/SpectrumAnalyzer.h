@@ -22,8 +22,12 @@ public:
     void paint(juce::Graphics& g) override;
     void resized() override;
 
+    void setVisualizerSmoothingValue(float val);
+
     // Method to push audio data into the analyzer
     void pushBuffer(const juce::AudioBuffer<float>& buffer);
+
+
 
 private:
 
@@ -44,6 +48,8 @@ private:
     bool nextFFTBlockReady = false;
 
     // Visualization parameters
+    float visualizerSmoothingValue;
+
     std::vector<float> midSpectrum;
     std::vector<float> sideSpectrum;
 

@@ -104,6 +104,12 @@ public:
         params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{"OUT", 1}, "Out Gain", -60.0f, 10.0f, 0.0f));
         params.push_back(std::make_unique<juce::AudioParameterBool>(juce::ParameterID{"BYPASS", 1}, "Bypass", false));
 
+        // Visualizer settings
+        params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{"VIS_SMOOTH", 1}, "Visualizer Smoothing Value", 0.0f, 1.0f, 0.69f));
+
+
+
+
         // Pre Filters
         params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{"LOW_MID_FREQ", 1}, "Low Mid Crossover Frequency", 0.0f, 8000.0f, 8000.0f));
         params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{"MID_HIGH_FREQ", 1}, "Mid High Crossover Frequency", 8000.0f, 15000.0f, 15000.0f));
@@ -141,6 +147,8 @@ public:
     }
 
 private:
+
+    ParameterManager paramManager;
 
     juce::dsp::Compressor<float> compressor;
 
