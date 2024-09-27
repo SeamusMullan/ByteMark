@@ -3,6 +3,7 @@
 #include <juce_audio_processors/juce_audio_processors.h>
 #include <juce_dsp/juce_dsp.h>
 #include <atomic>
+#include "ParameterManager.h"
 
 #if (MSVC)
 #include "ipps.h"
@@ -120,7 +121,7 @@ public:
         params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{"HIGH_GAIN", 1}, "High Gain", -60.0f, 10.0f, 0.0f));
 
         // Haas Delay
-        params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{"TIME", 1}, "Time (ms)", 5.0f, 35.0f, 20.0f));
+        params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{"HAAS_TIME", 1}, "Haas Time (ms)", 5.0f, 35.0f, 20.0f));
         params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{"HAAS_MIX", 1}, "Haas Mix", 0.0f, 100.0f, 50.0f));
 
         // Chorus

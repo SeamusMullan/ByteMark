@@ -94,7 +94,7 @@ void ParameterManager::updateParameters()
     highBandGain = apvts.getRawParameterValue("HIGH_GAIN")->load();
 
     // Haas Delay
-    haasTime = apvts.getRawParameterValue("TIME")->load();
+    haasTime = apvts.getRawParameterValue("HAAS_TIME")->load();
     haasMix = apvts.getRawParameterValue("HAAS_MIX")->load();
 
     // Chorus
@@ -144,7 +144,8 @@ void ParameterManager::updateEffectParameters(juce::dsp::Compressor<float>& comp
     highGain.setGainDecibels(highBandGain);
 
     // Update Haas Delay
-    haasDelay.setDelay(haasTime); // Time in milliseconds
+    auto haasTimeSamples = haasTime;
+    haasDelay.setDelay(haasTime); // Time in samples
     // Haas mix can be handled in the processBlock
 
     // Update Chorus

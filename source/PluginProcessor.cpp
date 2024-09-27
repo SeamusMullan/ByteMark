@@ -10,7 +10,9 @@ PluginProcessor::PluginProcessor()
                       #endif
                        .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
                      #endif
-                       ), apvts(*this, nullptr, "Parameters", createParameterLayout())
+                       ),
+    apvts(*this, nullptr, "Parameters", createParameterLayout()),
+    paramManager(apvts)
 {
 }
 
@@ -95,6 +97,7 @@ void PluginProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
     preLP.prepare(spec);
     preHP.prepare(spec);
     haasDelay.prepare(spec);
+    haasDelay.setMaximumDelayInSamples (sampleRate);
     chorus.prepare(spec);
     convolution.prepare(spec);
     compressor.prepare(spec);
@@ -191,21 +194,51 @@ bool PluginProcessor::FifoQueue::pull(juce::AudioBuffer<float>& buffer)
 void PluginProcessor::processBlock (juce::AudioBuffer<float>& buffer,
                                               juce::MidiBuffer& midiMessages)
 {
-    juce::ignoreUnused (midiMessages);
 
-    juce::ScopedNoDenormals noDenormals;
-    auto totalNumInputChannels  = getTotalNumInputChannels();
-    auto totalNumOutputChannels = getTotalNumOutputChannels();
+    // Update parameters
+    paramManager.updateParameters();
+    paramManager.updateEffectParameters(compressor, preLP, preHP, lowGain, midGain, highGain, haasDelay, chorus, convolution);
 
-    // Clear any extra output channels
-    for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
-        buffer.clear (i, 0, buffer.getNumSamples());
+    // Check for bypass
+    if (paramManager.isBypassed())
+    {
+        // Bypass processing
+        return;
+    }
 
-    // Apply your audio processing here
-    // For example:
-    // applyGain(buffer);
-    // applyEffects(buffer);
+    // Apply input gain
+    buffer.applyGain(juce::Decibels::decibelsToGain(paramManager.getInGain()));
 
+    // Create audio block for processing
+    juce::dsp::AudioBlock<float> block (buffer);
+    juce::dsp::ProcessContextReplacing<float> context (block);
+
+    // Apply pre-filters
+    preLP.process(context);
+    preHP.process(context);
+
+    // Apply band gains
+    lowGain.process(context);
+    midGain.process(context);
+    highGain.process(context);
+
+    // Apply Haas Delay
+    // Implement dry/wet mix for haasDelay
+    auto haasDelaySamples = apvts.getRawParameterValue("HAAS_TIME")->load() * (getSampleRate() / 1000.0f);
+    haasDelay.setDelay(haasDelaySamples);
+
+
+    // Apply Chorus
+    chorus.process(context);
+
+    // Apply Convolution
+    convolution.process(context);
+
+    // Apply Compressor
+    compressor.process(context);
+
+    // Apply output gain
+    buffer.applyGain(juce::Decibels::decibelsToGain(paramManager.getOutGain()));
     // Now push the processed buffer into the FIFO
     fifoQueue.push(buffer);
 }

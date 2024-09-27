@@ -30,10 +30,15 @@ MainTabComponent::MainTabComponent(PluginProcessor& p)
     addAndMakeVisible(midHighFreq);
 
     addAndMakeVisible(spectrumAnalyzer);
+
+    // Options button
+    addAndMakeVisible(optionsButton);
+    optionsButton.addListener(this);
 }
 
 MainTabComponent::~MainTabComponent()
 {
+    optionsButton.removeListener(this);
 }
 
 void MainTabComponent::paint(juce::Graphics& g)
@@ -75,4 +80,13 @@ void MainTabComponent::resized()
 
     // Position the spectrum analyzer
     spectrumAnalyzer.setBounds(visualizerArea);
+}
+
+void MainTabComponent::buttonClicked(juce::Button* button)
+{
+    if (button == &optionsButton)
+    {
+        auto optionsMenu = std::make_unique<OptionsMenu>(processorRef);
+        juce::CallOutBox::launchAsynchronously(std::move(optionsMenu), optionsButton.getScreenBounds(), this);
+    }
 }

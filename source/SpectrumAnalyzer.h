@@ -27,7 +27,7 @@ public:
     // Method to push audio data into the analyzer
     void pushBuffer(const juce::AudioBuffer<float>& buffer);
 
-
+    void drawSpectrumPath(juce::Graphics& g, const std::vector<juce::Point<float>>& points);
 
 private:
 
@@ -45,10 +45,12 @@ private:
     std::array<float, fftSize * 2> fftData; // For real and imaginary parts
     int fifoIndex = 0;
 
+
+
     bool nextFFTBlockReady = false;
 
     // Visualization parameters
-    float visualizerSmoothingValue;
+    float visualizerSmoothingValue = 0.5f;
 
     std::vector<float> midSpectrum;
     std::vector<float> sideSpectrum;

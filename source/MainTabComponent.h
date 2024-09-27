@@ -11,9 +11,10 @@
 #include "PluginProcessor.h"
 #include "SliderWithLabel.h"
 #include "SpectrumAnalyzer.h"
+#include "OptionsMenu.h"
 
 
-class MainTabComponent : public juce::Component
+class MainTabComponent : public juce::Component, public juce::Button::Listener
 {
 public:
     MainTabComponent(PluginProcessor& p);
@@ -22,10 +23,14 @@ public:
     void paint(juce::Graphics&) override;
     void resized() override;
 
+    void buttonClicked(juce::Button* button) override;
+
 private:
     PluginProcessor& processorRef;
 
     SpectrumAnalyzer spectrumAnalyzer;
+
+    juce::TextButton optionsButton { "Options" };
 
     // UI Components
     SliderWithLabel inputGain;

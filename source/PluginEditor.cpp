@@ -23,6 +23,7 @@ PluginEditor::PluginEditor (PluginProcessor& p)
     addAndMakeVisible(tabbedComponent);
 
 
+
     // Melatonin Inspector Button
     addAndMakeVisible (inspectButton);
     inspectButton.onClick = [&] {

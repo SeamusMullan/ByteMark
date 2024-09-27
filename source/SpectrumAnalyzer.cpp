@@ -2,14 +2,14 @@
 
 SpectrumAnalyzer::SpectrumAnalyzer(PluginProcessor& p)
     : forwardFFT(fftOrder),
-      window(fftSize, juce::dsp::WindowingFunction<float>::hann),
+      window(fftSize, juce::dsp::WindowingFunction<float>::hamming),
       processorRef(p)
 {
     fifo.fill(0);
     fftData.fill(0);
     midSpectrum.resize(fftSize / 2, 0.0f);
     sideSpectrum.resize(fftSize / 2, 0.0f);
-    startTimerHz(30); // Update at 30 FPS
+    startTimerHz(60); // Update at 60 FPS
 }
 
 
@@ -87,7 +87,7 @@ void SpectrumAnalyzer::pushBuffer(const juce::AudioBuffer<float>& buffer)
 
 void SpectrumAnalyzer::timerCallback()
 {
-    DBG("SpectrumAnalyzer timerCallback called");
+    // DBG("SpectrumAnalyzer timerCallback called");
     juce::AudioBuffer<float> buffer(2, fftSize);
 
     if (processorRef.fifoQueue.pull(buffer))
@@ -200,17 +200,35 @@ void SpectrumAnalyzer::drawFrame(juce::Graphics& g)
     juce::Path midPath;
     juce::Path sidePath;
 
-    constexpr float minDecibels = -100.0f;
+    constexpr float minDecibels = -80.0f;
     constexpr float maxDecibels = 0.0f;
     constexpr float epsilon = 1e-12f;
+
+    double referenceFrequency = 20.0; // Reference frequency for calculating octaves
 
     for (int i = 1; i < numPoints; ++i)
     {
         double frequency = i * binWidth;
-        double x = std::log10(frequency / 20.0) / std::log10(nyquist / 20.0) * width;
+
+        // Avoid frequencies below the reference frequency
+        if (frequency < referenceFrequency)
+            continue;
+
+        // Calculate the X position (logarithmic scaling)
+        double x = std::log10(frequency / referenceFrequency) / std::log10(nyquist / referenceFrequency) * width;
+
+        // Number of octaves above the reference frequency
+        double numOctaves = std::log2(frequency / referenceFrequency);
+
+        // Slope adjustment in dB
+        double slopeAdjustment = numOctaves * 4.5; // 4.5 dB per octave
 
         // Mid magnitude
         float midMagnitude = juce::Decibels::gainToDecibels(midSpectrum[i] + epsilon);
+
+        // Apply the slope adjustment
+        midMagnitude += static_cast<float>(slopeAdjustment);
+
         midMagnitude = juce::jlimit(minDecibels, maxDecibels, midMagnitude);
         float yMid = juce::jmap(midMagnitude, minDecibels, maxDecibels, static_cast<float>(height), 0.0f);
 
@@ -221,6 +239,10 @@ void SpectrumAnalyzer::drawFrame(juce::Graphics& g)
 
         // Side magnitude
         float sideMagnitude = juce::Decibels::gainToDecibels(sideSpectrum[i] + epsilon);
+
+        // Apply the slope adjustment
+        sideMagnitude += static_cast<float>(slopeAdjustment);
+
         sideMagnitude = juce::jlimit(minDecibels, maxDecibels, sideMagnitude);
         float ySide = juce::jmap(sideMagnitude, minDecibels, maxDecibels, static_cast<float>(height), 0.0f);
 
@@ -243,12 +265,11 @@ void SpectrumAnalyzer::drawFrame(juce::Graphics& g)
     std::vector<double> frequencies = { 50, 100, 200, 500, 1000, 2000, 5000, 10000, 20000 };
     for (auto freq : frequencies)
     {
-        if (freq < 20.0 || freq > nyquist)
+        if (freq < referenceFrequency || freq > nyquist)
             continue;
 
-        double x = std::log10(freq / 20.0) / std::log10(nyquist / 20.0) * width;
+        double x = std::log10(freq / referenceFrequency) / std::log10(nyquist / referenceFrequency) * width;
         g.drawVerticalLine(static_cast<int>(x), 0.0f, static_cast<float>(height));
         g.drawText(juce::String(freq) + " Hz", static_cast<int>(x) + 2, height - 20, 50, 20, juce::Justification::left);
     }
 }
-
