@@ -214,8 +214,8 @@ void PluginProcessor::processBlock (juce::AudioBuffer<float>& buffer,
     juce::dsp::ProcessContextReplacing<float> context (block);
 
     // Apply pre-filters
-    preLP.process(context);
-    preHP.process(context);
+    // preLP.process(context);
+    // preHP.process(context);
 
     // Apply band gains
     lowGain.process(context);
@@ -229,13 +229,13 @@ void PluginProcessor::processBlock (juce::AudioBuffer<float>& buffer,
 
 
     // Apply Chorus
-    chorus.process(context);
+    //chorus.process(context);
 
     // Apply Convolution
-    convolution.process(context);
+    //convolution.process(context);
 
     // Apply Compressor
-    compressor.process(context);
+    //compressor.process(context);
 
     // Apply output gain
     buffer.applyGain(juce::Decibels::decibelsToGain(paramManager.getOutGain()));

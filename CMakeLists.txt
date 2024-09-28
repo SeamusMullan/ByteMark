@@ -5,6 +5,8 @@ cmake_minimum_required(VERSION 3.24.1)
 
 # This tells cmake we have goodies in the /cmake folder
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+set(sdksDir "C:/asiosdk_2.3.3_2019-06-14")
+
 include (PamplejuceVersion)
 
 # Configures universal binaries and decides which version of macOS to support
@@ -102,6 +104,9 @@ include(Assets)
 # MacOS only: Cleans up folder and target organization on Xcode.
 include(XcodePrettify)
 
+target_include_directories(SharedCode INTERFACE ${sdksDir}/common)
+
+
 # This is where you can set preprocessor definitions for JUCE and your plugin
 target_compile_definitions(SharedCode
     INTERFACE
@@ -110,6 +115,8 @@ target_compile_definitions(SharedCode
     JUCE_WEB_BROWSER=0  # If you set this to 1, add `NEEDS_WEB_BROWSER TRUE` to the `juce_add_plugin` call
     JUCE_USE_CURL=0     # If you set this to 1, add `NEEDS_CURL TRUE` to the `juce_add_plugin` call
     JUCE_VST3_CAN_REPLACE_VST2=0
+
+    JUCE_ASIO=1 # Enables support for ASIO drivers
 
     # Uncomment if you are paying for a an Indie/Pro license or releasing under GPLv3
     # JUCE_DISPLAY_SPLASH_SCREEN=0
