@@ -200,8 +200,8 @@ void SpectrumAnalyzer::drawFrame(juce::Graphics& g)
     juce::Path midPath;
     juce::Path sidePath;
 
-    constexpr float minDecibels = -80.0f;
-    constexpr float maxDecibels = 0.0f;
+    constexpr float minDecibels = -60.0f;
+    constexpr float maxDecibels = 100.0f;
     constexpr float epsilon = 1e-12f;
 
     double referenceFrequency = 20.0; // Reference frequency for calculating octaves
