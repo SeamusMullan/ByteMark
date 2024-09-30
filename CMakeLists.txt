@@ -5,6 +5,8 @@ cmake_minimum_required(VERSION 3.24.1)
 
 # This tells cmake we have goodies in the /cmake folder
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+
+# we dont need to worry about this on macos since it uses CoreAudio <3
 set(sdksDir "C:/asiosdk_2.3.3_2019-06-14")
 
 include (PamplejuceVersion)
