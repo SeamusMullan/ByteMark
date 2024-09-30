@@ -4,10 +4,10 @@ PluginEditor::PluginEditor (PluginProcessor& p)
     : AudioProcessorEditor (&p),
       processorRef (p),
       mainTab (processorRef),
-      haasDelayTab (processorRef)
+      haasDelayTab (processorRef),
       // chorusTab (processorRef),
       // convolutionTab (processorRef),
-      // compressorTab (processorRef)
+      compressorTab (processorRef)
 {
     // Set custom LookAndFeel
     setLookAndFeel(&customLookAndFeel);
@@ -17,7 +17,7 @@ PluginEditor::PluginEditor (PluginProcessor& p)
     tabbedComponent.addTab("Haas Delay", juce::Colours::darkgrey, &haasDelayTab, false);
     // tabbedComponent.addTab("Chorus", juce::Colours::darkgrey, &chorusTab, false);
     // tabbedComponent.addTab("Convolution", juce::Colours::darkgrey, &convolutionTab, false);
-    // tabbedComponent.addTab("Compressor", juce::Colours::darkgrey, &compressorTab, false);
+    tabbedComponent.addTab("Compressor", juce::Colours::darkgrey, &compressorTab, false);
     // Add other tabs as needed
 
     addAndMakeVisible(tabbedComponent);

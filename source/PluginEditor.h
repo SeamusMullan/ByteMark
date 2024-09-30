@@ -7,7 +7,7 @@
 #include "HaasDelayTabComponent.h"
 // #include "ChorusTabComponent.h"
 // #include "ConvolutionTabComponent.h"
-// #include "CompressorTabComponent.h"
+#include "CompressorTabComponent.h"
 // Include other tab components as needed
 
 //==============================================================================
@@ -37,7 +37,7 @@ private:
     HaasDelayTabComponent haasDelayTab;
     // ChorusTabComponent chorusTab;
     // ConvolutionTabComponent convolutionTab;
-    // CompressorTabComponent compressorTab;
+    CompressorTabComponent compressorTab;
     // Add other tabs as needed
 
 

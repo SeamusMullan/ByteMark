@@ -94,7 +94,7 @@ void ParameterManager::updateParameters()
     highBandGain = apvts.getRawParameterValue("HIGH_GAIN")->load();
 
     // Haas Delay
-    haasTime = apvts.getRawParameterValue("HAAS_TIME")->load();
+    // haasTime = apvts.getRawParameterValue("HAAS_TIME")->load(); // do this in process block, depends on samplerate
     haasMix = apvts.getRawParameterValue("HAAS_MIX")->load();
 
     // Chorus

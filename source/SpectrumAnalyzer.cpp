@@ -35,6 +35,7 @@ void SpectrumAnalyzer::setVisualizerSmoothingValue(float val)
     visualizerSmoothingValue = val;
 }
 
+
 void SpectrumAnalyzer::pushBuffer(const juce::AudioBuffer<float>& buffer)
 {
     auto numSamples = buffer.getNumSamples();

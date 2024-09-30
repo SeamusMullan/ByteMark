@@ -153,7 +153,9 @@ private:
 
     juce::dsp::Compressor<float> compressor;
 
-    juce::dsp::LinkwitzRileyFilter<float> preLP, preHP;
+    // Add additional filters for splitting
+    juce::dsp::LinkwitzRileyFilter<float> lowMidCrossover;
+    juce::dsp::LinkwitzRileyFilter<float> midHighCrossover;
     juce::dsp::Gain<float> lowGain, midGain, highGain;
 
     juce::dsp::DelayLine<float> haasDelay; // 5-35  ms

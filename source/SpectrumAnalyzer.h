@@ -34,7 +34,7 @@ private:
     PluginProcessor& processorRef;
 
     // FFT parameters
-    static constexpr int fftOrder = 11; // 2048-point FFT
+    static constexpr int fftOrder = 10; // 2048-point FFT
     static constexpr int fftSize = 1 << fftOrder;
 
     juce::dsp::FFT forwardFFT;

@@ -94,8 +94,8 @@ void PluginProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
     spec.numChannels = getTotalNumInputChannels();
     spec.maximumBlockSize = samplesPerBlock;
 
-    preLP.prepare(spec);
-    preHP.prepare(spec);
+    lowMidCrossover.prepare(spec);
+    midHighCrossover.prepare(spec);
     haasDelay.prepare(spec);
     haasDelay.setMaximumDelayInSamples (sampleRate);
     chorus.prepare(spec);
@@ -106,8 +106,8 @@ void PluginProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
     highGain.prepare(spec);
 
     // Reset DSP modules
-    preLP.reset();
-    preHP.reset();
+    lowMidCrossover.reset();
+    midHighCrossover.reset();
     haasDelay.reset();
     chorus.reset();
     convolution.reset();
@@ -192,12 +192,12 @@ bool PluginProcessor::FifoQueue::pull(juce::AudioBuffer<float>& buffer)
 
 
 void PluginProcessor::processBlock (juce::AudioBuffer<float>& buffer,
-                                              juce::MidiBuffer& midiMessages)
+                                    juce::MidiBuffer& midiMessages)
 {
-
     // Update parameters
     paramManager.updateParameters();
-    paramManager.updateEffectParameters(compressor, preLP, preHP, lowGain, midGain, highGain, haasDelay, chorus, convolution);
+    paramManager.updateEffectParameters (compressor, lowMidCrossover, midHighCrossover,
+                                         lowGain, midGain, highGain, haasDelay, chorus, convolution);
 
     // Check for bypass
     if (paramManager.isBypassed())
@@ -207,41 +207,127 @@ void PluginProcessor::processBlock (juce::AudioBuffer<float>& buffer,
     }
 
     // Apply input gain
-    buffer.applyGain(juce::Decibels::decibelsToGain(paramManager.getInGain()));
+    buffer.applyGain (juce::Decibels::decibelsToGain (paramManager.getInGain()));
 
-    // Create audio block for processing
-    juce::dsp::AudioBlock<float> block (buffer);
-    juce::dsp::ProcessContextReplacing<float> context (block);
+    // Prepare the main audio block
+    juce::dsp::AudioBlock<float> mainBlock (buffer);
 
-    // Apply pre-filters
-    // preLP.process(context);
-    // preHP.process(context);
+    // Create separate buffers for low, mid, and high bands
+    juce::AudioBuffer<float> lowBuffer, midBuffer, highBuffer;
+    lowBuffer.setSize (buffer.getNumChannels(), buffer.getNumSamples(), false, false, true);
+    midBuffer.setSize (buffer.getNumChannels(), buffer.getNumSamples(), false, false, true);
+    highBuffer.setSize (buffer.getNumChannels(), buffer.getNumSamples(), false, false, true);
 
-    // Apply band gains
-    lowGain.process(context);
-    midGain.process(context);
-    highGain.process(context);
+    // Copy the input buffer to the band buffers
+    lowBuffer.makeCopyOf (buffer);
+    midBuffer.makeCopyOf (buffer);
+    highBuffer.makeCopyOf (buffer);
+
+    // Create audio blocks for each band
+    juce::dsp::AudioBlock<float> lowBlock (lowBuffer);
+    juce::dsp::AudioBlock<float> midBlock (midBuffer);
+    juce::dsp::AudioBlock<float> highBlock (highBuffer);
+
+    juce::dsp::ProcessContextReplacing<float> lowContext (lowBlock);
+    juce::dsp::ProcessContextReplacing<float> midContext (midBlock);
+    juce::dsp::ProcessContextReplacing<float> highContext (highBlock);
+
+    // Set crossover frequencies from parameters
+    float lowMidFreq = apvts.getRawParameterValue ("LOW_MID_FREQ")->load();
+    float midHighFreq = apvts.getRawParameterValue ("MID_HIGH_FREQ")->load();
+
+    lowMidCrossover.setCutoffFrequency (lowMidFreq);
+    midHighCrossover.setCutoffFrequency (midHighFreq);
+
+    // Process filters to split the signal into bands
+    lowMidCrossover.process (lowContext);
+    midHighCrossover.process (midContext);
+
+    // Calculate high band by subtracting low and mid from the original signal
+    for (int channel = 0; channel < buffer.getNumChannels(); ++channel)
+    {
+        auto* originalData = buffer.getReadPointer (channel);
+        auto* lowData = lowBuffer.getReadPointer (channel);
+        auto* midData = midBuffer.getReadPointer (channel);
+        auto* highData = highBuffer.getWritePointer (channel);
+
+        for (int sample = 0; sample < buffer.getNumSamples(); ++sample)
+        {
+            highData[sample] = originalData[sample] - lowData[sample] - midData[sample];
+        }
+    }
+
+    // Apply gains to each band
+    lowGain.setGainDecibels (apvts.getRawParameterValue ("LOW_GAIN")->load());
+    midGain.setGainDecibels (apvts.getRawParameterValue ("MID_GAIN")->load());
+    highGain.setGainDecibels (apvts.getRawParameterValue ("HIGH_GAIN")->load());
+
+    lowGain.process (lowContext);
+    midGain.process (midContext);
+    highGain.process (highContext);
+
+    // Recombine the bands into the main buffer
+    for (int channel = 0; channel < buffer.getNumChannels(); ++channel)
+    {
+        auto* mainData = buffer.getWritePointer (channel);
+        auto* lowData = lowBuffer.getReadPointer (channel);
+        auto* midData = midBuffer.getReadPointer (channel);
+        auto* highData = highBuffer.getReadPointer (channel);
+
+        for (int sample = 0; sample < buffer.getNumSamples(); ++sample)
+        {
+            mainData[sample] = lowData[sample] + midData[sample] + highData[sample];
+        }
+    }
 
     // Apply Haas Delay
-    // Implement dry/wet mix for haasDelay
-    auto haasDelaySamples = apvts.getRawParameterValue("HAAS_TIME")->load() * (getSampleRate() / 1000.0f);
-    haasDelay.setDelay(haasDelaySamples);
+    // Retrieve the Haas delay time in samples
+    float haasDelayTimeMs = apvts.getRawParameterValue ("HAAS_TIME")->load();
+    float haasDelaySamples = haasDelayTimeMs * (float) (getSampleRate() / 1000.0);
+    haasDelay.setDelay (haasDelaySamples);
 
+    // Get the mix parameter (0.0 to 1.0)
+    float haasMix = apvts.getRawParameterValue ("HAAS_MIX")->load() / 100.0f;
+
+    // Apply delay to the right channel
+    if (buffer.getNumChannels() > 1)
+    {
+        auto* rightChannelData = buffer.getWritePointer (1);
+
+        // Create an array of pointers for the AudioBlock constructor
+        float* channelDataArray[] = { rightChannelData };
+
+        juce::dsp::AudioBlock<float> rightBlock (channelDataArray, 1, (size_t) buffer.getNumSamples());
+        juce::dsp::ProcessContextReplacing<float> rightContext (rightBlock);
+
+        // Process the delay
+        haasDelay.process (rightContext);
+
+        // Mix dry and wet signals
+        auto* originalRightChannelData = buffer.getReadPointer (1);
+
+        for (int sample = 0; sample < buffer.getNumSamples(); ++sample)
+        {
+            rightChannelData[sample] = (1.0f - haasMix) * originalRightChannelData[sample] + haasMix * rightBlock.getSample (0, sample);
+        }
+    }
 
     // Apply Chorus
-    //chorus.process(context);
+    // chorus.process (juce::dsp::ProcessContextReplacing<float> (mainBlock));
 
     // Apply Convolution
-    //convolution.process(context);
+    // convolution.process (juce::dsp::ProcessContextReplacing<float> (mainBlock));
 
     // Apply Compressor
-    //compressor.process(context);
+    compressor.process (juce::dsp::ProcessContextReplacing<float> (mainBlock));
 
     // Apply output gain
-    buffer.applyGain(juce::Decibels::decibelsToGain(paramManager.getOutGain()));
+    buffer.applyGain (juce::Decibels::decibelsToGain (paramManager.getOutGain()));
+
     // Now push the processed buffer into the FIFO
-    fifoQueue.push(buffer);
+    fifoQueue.push (buffer);
 }
+
 
 
 //==============================================================================
