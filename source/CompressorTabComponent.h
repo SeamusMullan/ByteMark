@@ -15,6 +15,7 @@
 #include <juce_gui_basics/juce_gui_basics.h>
 #include "PluginProcessor.h"
 #include "SliderWithLabel.h"
+#include "SliderWithLabel.h"
 
 class CompressorTabComponent : public juce::Component
 {
