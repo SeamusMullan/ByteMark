@@ -35,7 +35,9 @@ private:
     // UI Components
     SliderWithLabel inputGain;
     SliderWithLabel outputGain;
+    SliderWithLabel bassMonoFreq;
     SliderWithLabel overallMix; // If you have an overall mix parameter
+    juce::ToggleButton bassMonoButton;
     juce::ToggleButton bypassButton;
 
     SliderWithLabel lowMidFreq;
@@ -46,8 +48,10 @@ private:
 
     Attachment inputGainAttachment;
     Attachment outputGainAttachment;
+    Attachment bassMonoFreqAttachment;
     Attachment overallMixAttachment; // If applicable
     std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> bypassAttachment;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> bassMonoButtonAttachment;
 
     Attachment lowMidFreqAttachment;
     Attachment midHighFreqAttachment;

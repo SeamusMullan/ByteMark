@@ -96,6 +96,7 @@ void PluginProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 
     lowMidCrossover.prepare(spec);
     midHighCrossover.prepare(spec);
+    bassMonoFilter.prepare (spec);
     haasDelay.prepare(spec);
     haasDelay.setMaximumDelayInSamples (sampleRate);
     chorus.prepare(spec);
@@ -108,6 +109,7 @@ void PluginProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
     // Reset DSP modules
     lowMidCrossover.reset();
     midHighCrossover.reset();
+    bassMonoFilter.reset();
     haasDelay.reset();
     chorus.reset();
     convolution.reset();
@@ -283,7 +285,7 @@ void PluginProcessor::processBlock (juce::AudioBuffer<float>& buffer,
     // Apply Haas Delay
     // Retrieve the Haas delay time in samples
     float haasDelayTimeMs = apvts.getRawParameterValue ("HAAS_TIME")->load();
-    float haasDelaySamples = haasDelayTimeMs * (float) (getSampleRate() / 1000.0);
+    float haasDelaySamples = haasDelayTimeMs * static_cast<float>( (getSampleRate() / 1000.0));
     haasDelay.setDelay (haasDelaySamples);
 
     // Get the mix parameter (0.0 to 1.0)
@@ -297,11 +299,11 @@ void PluginProcessor::processBlock (juce::AudioBuffer<float>& buffer,
         // Create an array of pointers for the AudioBlock constructor
         float* channelDataArray[] = { rightChannelData };
 
-        juce::dsp::AudioBlock<float> rightBlock (channelDataArray, 1, (size_t) buffer.getNumSamples());
+        juce::dsp::AudioBlock<float> rightBlock (channelDataArray, 1, static_cast<size_t> (buffer.getNumSamples()));
         juce::dsp::ProcessContextReplacing<float> rightContext (rightBlock);
 
         // Process the delay
-        haasDelay.process (rightContext);
+        //haasDelay.process (rightContext);
 
         // Mix dry and wet signals
         auto* originalRightChannelData = buffer.getReadPointer (1);

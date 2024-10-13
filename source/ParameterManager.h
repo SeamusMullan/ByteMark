@@ -57,6 +57,8 @@ private:
     // Parameters
     float inGain = 0.0f;
     float outGain = 0.0f;
+    bool bassMono = false;
+    float bassMonoFreq = 200.0f;
     bool bypass = false;
     float visSmooth = 0.69f;
 

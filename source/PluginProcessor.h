@@ -105,6 +105,9 @@ public:
         params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{"OUT", 1}, "Out Gain", -60.0f, 10.0f, 0.0f));
         params.push_back(std::make_unique<juce::AudioParameterBool>(juce::ParameterID{"BYPASS", 1}, "Bypass", false));
 
+        params.push_back(std::make_unique<juce::AudioParameterBool>(juce::ParameterID{"BASS_MONO", 1}, "Bass Mono", false));
+        params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{"BASS_MONO_FREQ", 1}, "Bass Mono Frequency", 10.0f, 300.0f, 0.0f));
+
         // Visualizer settings
         params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{"VIS_SMOOTH", 1}, "Visualizer Smoothing Value", 0.0f, 1.0f, 0.69f));
 
@@ -152,6 +155,8 @@ private:
     ParameterManager paramManager;
 
     juce::dsp::Compressor<float> compressor;
+
+    juce::dsp::IIR::Filter<float> bassMonoFilter; // IIR has less latency (generally), may change to FIR because of linear phase...
 
     // Add additional filters for splitting
     juce::dsp::LinkwitzRileyFilter<float> lowMidCrossover;

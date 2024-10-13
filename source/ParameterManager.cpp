@@ -63,6 +63,8 @@ void ParameterManager::mapParametersToEffects()
     effectParameters["Global"] = {
         apvts.getParameter("IN"),
         apvts.getParameter("OUT"),
+        apvts.getParameter ("BASS_MONO"),
+        apvts.getParameter ("BASS_MONO_FREQ"),
         apvts.getParameter("BYPASS"),
         apvts.getParameter("VIS_SMOOTH")
     };

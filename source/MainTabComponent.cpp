@@ -6,34 +6,40 @@
 
 #include "juce_audio_plugin_client/Unity/juce_UnityPluginInterface.h"
 
-MainTabComponent::MainTabComponent(PluginProcessor& p)
-    : processorRef(p),
-      spectrumAnalyzer(p),
-      inputGain("Input Gain"),
-      outputGain("Output Gain"),
-      overallMix("Overall Mix"), // If you have this parameter
-      lowMidFreq("Low-Mid Freq", juce::Slider::LinearHorizontal),
-      midHighFreq("Mid-High Freq", juce::Slider::LinearHorizontal),
-      inputGainAttachment(processorRef.apvts, "IN", inputGain.slider),
-      outputGainAttachment(processorRef.apvts, "OUT", outputGain.slider),
-      overallMixAttachment(processorRef.apvts, "OVERALL_MIX", overallMix.slider), // If applicable
-      bypassAttachment(std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(processorRef.apvts, "BYPASS", bypassButton)),
-      lowMidFreqAttachment(processorRef.apvts, "LOW_MID_FREQ", lowMidFreq.slider),
-      midHighFreqAttachment(processorRef.apvts, "MID_HIGH_FREQ", midHighFreq.slider)
+MainTabComponent::MainTabComponent (PluginProcessor& p)
+    : processorRef (p),
+      spectrumAnalyzer (p),
+      inputGain ("Input Gain"),
+      outputGain ("Output Gain"),
+      bassMonoButton ("Bass Mono"),
+      bassMonoFreq ("Bass Mono Frequency"),
+      overallMix ("Overall Mix"), // If you have this parameter
+      lowMidFreq ("Low-Mid Freq", juce::Slider::LinearHorizontal),
+      midHighFreq ("Mid-High Freq", juce::Slider::LinearHorizontal),
+      inputGainAttachment (processorRef.apvts, "IN", inputGain.slider),
+      outputGainAttachment (processorRef.apvts, "OUT", outputGain.slider),
+      bassMonoFreqAttachment(processorRef.apvts, "BASS_MONO_FREQ", bassMonoFreq.slider),
+      overallMixAttachment (processorRef.apvts, "OVERALL_MIX", overallMix.slider), // If applicable
+      bypassAttachment (std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment> (processorRef.apvts, "BYPASS", bypassButton)),
+      bassMonoButtonAttachment (std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment> (processorRef.apvts, "BASS_MONO", bassMonoButton)),
+      lowMidFreqAttachment (processorRef.apvts, "LOW_MID_FREQ", lowMidFreq.slider),
+      midHighFreqAttachment (processorRef.apvts, "MID_HIGH_FREQ", midHighFreq.slider)
 {
-    addAndMakeVisible(inputGain);
-    addAndMakeVisible(outputGain);
-    addAndMakeVisible(overallMix); // If applicable
-    addAndMakeVisible(bypassButton);
+    addAndMakeVisible (inputGain);
+    addAndMakeVisible (outputGain);
+    addAndMakeVisible (bassMonoFreq);
+    addAndMakeVisible (overallMix); // If applicable
+    addAndMakeVisible (bypassButton);
+    addAndMakeVisible (bassMonoButton);
 
-    addAndMakeVisible(lowMidFreq);
-    addAndMakeVisible(midHighFreq);
+    addAndMakeVisible (lowMidFreq);
+    addAndMakeVisible (midHighFreq);
 
-    addAndMakeVisible(spectrumAnalyzer);
+    addAndMakeVisible (spectrumAnalyzer);
 
     // Options button
-    addAndMakeVisible(optionsButton);
-    optionsButton.addListener(this);
+    addAndMakeVisible (optionsButton);
+    optionsButton.addListener (this);
 }
 
 MainTabComponent::~MainTabComponent()
