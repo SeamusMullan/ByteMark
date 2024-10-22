@@ -11,7 +11,7 @@ OptionsMenu::OptionsMenu(PluginProcessor& p)
     closeButton.addListener(this);
 
     // Set the size of the options menu
-    setSize(300, 150);
+    setSize(800, 400);
 }
 
 OptionsMenu::~OptionsMenu()
@@ -30,8 +30,8 @@ void OptionsMenu::resized()
 {
     auto area = getLocalBounds().reduced(10);
 
-    smoothingSlider.setBounds(area.removeFromTop(50));
-    closeButton.setBounds(area.removeFromTop(30).removeFromRight(80));
+    smoothingSlider.setBounds(area.removeFromTop(50).removeFromLeft(150));
+    closeButton.setBounds(area.removeFromBottom(30).removeFromRight(80));
 }
 
 void OptionsMenu::buttonClicked(juce::Button* button)

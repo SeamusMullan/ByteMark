@@ -196,10 +196,15 @@ bool PluginProcessor::FifoQueue::pull(juce::AudioBuffer<float>& buffer)
 void PluginProcessor::processBlock (juce::AudioBuffer<float>& buffer,
                                     juce::MidiBuffer& midiMessages)
 {
+
+
+
     // Update parameters
     paramManager.updateParameters();
     paramManager.updateEffectParameters (compressor, lowMidCrossover, midHighCrossover,
                                          lowGain, midGain, highGain, haasDelay, chorus, convolution);
+
+
 
     // Check for bypass
     if (paramManager.isBypassed())

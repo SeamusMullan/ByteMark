@@ -50,6 +50,7 @@ MainTabComponent::~MainTabComponent()
 void MainTabComponent::paint(juce::Graphics& g)
 {
     g.fillAll(juce::Colours::darkgrey);
+    spectrumAnalyzer.setVisualizerSmoothingValue (processorRef.apvts.getRawParameterValue ("VIS_SMOOTH")->load());
 }
 
 void MainTabComponent::resized()
@@ -86,6 +87,8 @@ void MainTabComponent::resized()
 
     // Position the spectrum analyzer
     spectrumAnalyzer.setBounds(visualizerArea);
+
+    optionsButton.setBounds(120, 80, 80, 30);
 }
 
 void MainTabComponent::buttonClicked(juce::Button* button)

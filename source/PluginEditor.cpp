@@ -51,6 +51,7 @@ void PluginEditor::paint (juce::Graphics& g)
 {
     // Fill background
     g.fillAll (juce::Colours::black);
+
 }
 
 void PluginEditor::resized()
