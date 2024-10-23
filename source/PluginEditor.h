@@ -32,6 +32,8 @@ private:
     // Tabbed Component
     juce::TabbedComponent tabbedComponent { juce::TabbedButtonBar::TabsAtTop };
 
+    SpectrumAnalyzer spectrumAnalyzer;
+
     // Tab Components
     MainTabComponent mainTab;
     HaasDelayTabComponent haasDelayTab;

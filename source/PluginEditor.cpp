@@ -3,6 +3,7 @@
 PluginEditor::PluginEditor (PluginProcessor& p)
     : AudioProcessorEditor (&p),
       processorRef (p),
+      spectrumAnalyzer (p),
       mainTab (processorRef),
       haasDelayTab (processorRef),
       // chorusTab (processorRef),
@@ -22,6 +23,7 @@ PluginEditor::PluginEditor (PluginProcessor& p)
 
     addAndMakeVisible(tabbedComponent);
 
+    addAndMakeVisible (spectrumAnalyzer);
 
 
     // Melatonin Inspector Button
@@ -51,13 +53,19 @@ void PluginEditor::paint (juce::Graphics& g)
 {
     // Fill background
     g.fillAll (juce::Colours::black);
+    spectrumAnalyzer.setVisualizerSmoothingValue (processorRef.apvts.getRawParameterValue ("VIS_SMOOTH")->load());
 
 }
 
 void PluginEditor::resized()
 {
     auto area = getLocalBounds();
-    tabbedComponent.setBounds(area);
+
+    auto mainArea = area.removeFromTop(area.getHeight()*0.66f);
+    auto visualizerArea = area;
+
+    tabbedComponent.setBounds(mainArea);
+    spectrumAnalyzer.setBounds(visualizerArea);
 
     // Position the Melatonin Inspector Button at the bottom right corner
     inspectButton.setBounds(getWidth() - 80 - 10, getHeight() - 30 - 10, 80, 30);

@@ -8,7 +8,6 @@
 
 MainTabComponent::MainTabComponent (PluginProcessor& p)
     : processorRef (p),
-      spectrumAnalyzer (p),
       inputGain ("Input Gain"),
       outputGain ("Output Gain"),
       bassMonoButton ("Bass Mono"),
@@ -35,10 +34,11 @@ MainTabComponent::MainTabComponent (PluginProcessor& p)
     addAndMakeVisible (lowMidFreq);
     addAndMakeVisible (midHighFreq);
 
-    addAndMakeVisible (spectrumAnalyzer);
+
 
     // Options button
     addAndMakeVisible (optionsButton);
+
     optionsButton.addListener (this);
 }
 
@@ -50,16 +50,14 @@ MainTabComponent::~MainTabComponent()
 void MainTabComponent::paint(juce::Graphics& g)
 {
     g.fillAll(juce::Colours::darkgrey);
-    spectrumAnalyzer.setVisualizerSmoothingValue (processorRef.apvts.getRawParameterValue ("VIS_SMOOTH")->load());
 }
 
 void MainTabComponent::resized()
 {
-    auto area = getLocalBounds().reduced(10);
+    auto area = getLocalBounds();
 
     // Divide the area for controls and visualizer
-    auto controlArea = area.removeFromTop(area.getHeight() * 0.5);
-    auto visualizerArea = area;
+    auto controlArea = area;
 
     juce::FlexBox flexBox;
     flexBox.flexDirection = juce::FlexBox::Direction::column;
@@ -86,9 +84,10 @@ void MainTabComponent::resized()
     flexBox.performLayout(controlArea);
 
     // Position the spectrum analyzer
-    spectrumAnalyzer.setBounds(visualizerArea);
 
-    optionsButton.setBounds(120, 80, 80, 30);
+
+    optionsButton.setBounds(getWidth()-40, 0, 40, 40);
+
 }
 
 void MainTabComponent::buttonClicked(juce::Button* button)
@@ -96,6 +95,6 @@ void MainTabComponent::buttonClicked(juce::Button* button)
     if (button == &optionsButton)
     {
         auto optionsMenu = std::make_unique<OptionsMenu>(processorRef);
-        juce::CallOutBox::launchAsynchronously(std::move(optionsMenu), optionsButton.getScreenBounds(), this);
+        juce::CallOutBox::launchAsynchronously(std::move(optionsMenu), optionsButton.getScreenBounds(), nullptr);
     }
 }

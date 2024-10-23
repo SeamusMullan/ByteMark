@@ -11,7 +11,7 @@ OptionsMenu::OptionsMenu(PluginProcessor& p)
     closeButton.addListener(this);
 
     // Set the size of the options menu
-    setSize(800, 400);
+    setSize(450, 200);
 }
 
 OptionsMenu::~OptionsMenu()
@@ -21,14 +21,14 @@ OptionsMenu::~OptionsMenu()
 
 void OptionsMenu::paint(juce::Graphics& g)
 {
-    g.fillAll(juce::Colours::lightgrey);
+    g.fillAll(juce::Colour::fromRGB (45,45,45));
     g.setColour(juce::Colours::darkgrey);
-    g.drawRect(getLocalBounds(), 1);
 }
 
 void OptionsMenu::resized()
 {
     auto area = getLocalBounds().reduced(10);
+
 
     smoothingSlider.setBounds(area.removeFromTop(50).removeFromLeft(150));
     closeButton.setBounds(area.removeFromBottom(30).removeFromRight(80));

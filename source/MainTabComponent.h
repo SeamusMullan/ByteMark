@@ -28,9 +28,9 @@ public:
 private:
     PluginProcessor& processorRef;
 
-    SpectrumAnalyzer spectrumAnalyzer;
 
-    juce::TextButton optionsButton { "Options" };
+
+    juce::TextButton optionsButton { u8"⚙", "Options" };
 
     // UI Components
     SliderWithLabel inputGain;

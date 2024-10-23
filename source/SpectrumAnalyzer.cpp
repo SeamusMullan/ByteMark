@@ -153,9 +153,6 @@ void SpectrumAnalyzer::timerCallback()
                 nextFFTBlockReady = true;
             }
         }
-    } else
-    {
-        DBG("SpectrumAnalyzer timerCallback called with no FFT");
     }
 
 
@@ -172,7 +169,7 @@ void SpectrumAnalyzer::applySmoothing()
     static std::vector<float> previousMidSpectrum(midSpectrum.size(), 0.0f);
     static std::vector<float> previousSideSpectrum(sideSpectrum.size(), 0.0f);
 
-    float smoothingFactor = 0.5f; // Adjust between 0.0f (no smoothing) and 1.0f (full smoothing)
+    float smoothingFactor = visualizerSmoothingValue; // Adjust between 0.0f (no smoothing) and 1.0f (full smoothing)
 
     for (size_t i = 0; i < midSpectrum.size(); ++i)
     {
@@ -205,7 +202,7 @@ void SpectrumAnalyzer::drawFrame(juce::Graphics& g)
     constexpr float maxDecibels = 100.0f;
     constexpr float epsilon = 1e-12f;
 
-    double referenceFrequency = 20.0; // Reference frequency for calculating octaves
+    double referenceFrequency = 40.0; // Reference frequency for calculating octaves
 
     for (int i = 1; i < numPoints; ++i)
     {
