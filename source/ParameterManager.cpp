@@ -66,7 +66,10 @@ void ParameterManager::mapParametersToEffects()
         apvts.getParameter ("BASS_MONO"),
         apvts.getParameter ("BASS_MONO_FREQ"),
         apvts.getParameter("BYPASS"),
-        apvts.getParameter("VIS_SMOOTH")
+        apvts.getParameter("VIS_SMOOTH"),
+        apvts.getParameter("LOW_SOLO"),
+        apvts.getParameter("MID_SOLO"),
+        apvts.getParameter("HIGH_SOLO")
     };
 }
 
@@ -89,6 +92,10 @@ void ParameterManager::updateParameters()
     // Pre Filters
     lowMidFreq = apvts.getRawParameterValue("LOW_MID_FREQ")->load();
     midHighFreq = apvts.getRawParameterValue("MID_HIGH_FREQ")->load();
+
+    lowSolo = apvts.getRawParameterValue ("LOW_SOLO")->load();
+    midSolo = apvts.getRawParameterValue ("MID_SOLO")->load();
+    highSolo = apvts.getRawParameterValue ("HIGH_SOLO")->load();
 
     // Band Gains
     lowBandGain = apvts.getRawParameterValue("LOW_GAIN")->load();

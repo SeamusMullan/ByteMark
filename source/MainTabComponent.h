@@ -39,6 +39,7 @@ private:
     SliderWithLabel overallMix; // If you have an overall mix parameter
     juce::ToggleButton bassMonoButton;
     juce::ToggleButton bypassButton;
+    juce::ToggleButton lowSoloButton, midSoloButton, highSoloButton;
 
     SliderWithLabel lowMidFreq;
     SliderWithLabel midHighFreq;
@@ -50,8 +51,15 @@ private:
     Attachment outputGainAttachment;
     Attachment bassMonoFreqAttachment;
     Attachment overallMixAttachment; // If applicable
-    std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> bypassAttachment;
-    std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> bassMonoButtonAttachment;
+
+    using Button = juce::AudioProcessorValueTreeState::ButtonAttachment;
+
+    Button bypassAttachment;
+    Button bassMonoButtonAttachment;
+
+    Button lowSoloAttachment;
+    Button midSoloAttachment;
+    Button highSoloAttachment;
 
     Attachment lowMidFreqAttachment;
     Attachment midHighFreqAttachment;

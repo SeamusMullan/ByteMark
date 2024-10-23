@@ -23,10 +23,15 @@ TEST_CASE ("Plugin instance", "[instance]")
     //         Catch::Matchers::Equals ("Pamplejuce Demo"));
     // }
 
-    SECTION ("Audio Tests")
-    {
-        // CHECK_THAT ()
-    }
+}
+
+
+TEST_CASE ("Parameters Function As Intended?" "[parameters]")
+{
+    PluginProcessor processor;
+
+    // Test Bypass, Enable, etc.
+
 }
 
 

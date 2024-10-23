@@ -15,12 +15,21 @@ MainTabComponent::MainTabComponent (PluginProcessor& p)
       overallMix ("Overall Mix"), // If you have this parameter
       lowMidFreq ("Low-Mid Freq", juce::Slider::LinearHorizontal),
       midHighFreq ("Mid-High Freq", juce::Slider::LinearHorizontal),
+      lowSoloButton ("Low Band Solo"),
+      midSoloButton ("Mid Band Solo"),
+      highSoloButton ("High Band Solo"),
+
       inputGainAttachment (processorRef.apvts, "IN", inputGain.slider),
       outputGainAttachment (processorRef.apvts, "OUT", outputGain.slider),
       bassMonoFreqAttachment(processorRef.apvts, "BASS_MONO_FREQ", bassMonoFreq.slider),
       overallMixAttachment (processorRef.apvts, "OVERALL_MIX", overallMix.slider), // If applicable
-      bypassAttachment (std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment> (processorRef.apvts, "BYPASS", bypassButton)),
-      bassMonoButtonAttachment (std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment> (processorRef.apvts, "BASS_MONO", bassMonoButton)),
+      bypassAttachment (processorRef.apvts, "BYPASS", bypassButton),
+      bassMonoButtonAttachment (processorRef.apvts, "BASS_MONO", bassMonoButton),
+
+      lowSoloAttachment(processorRef.apvts, "LOW_SOLO", lowSoloButton),
+      midSoloAttachment(processorRef.apvts, "MID_SOLO", midSoloButton),
+      highSoloAttachment(processorRef.apvts, "HIGH_SOLO", highSoloButton),
+
       lowMidFreqAttachment (processorRef.apvts, "LOW_MID_FREQ", lowMidFreq.slider),
       midHighFreqAttachment (processorRef.apvts, "MID_HIGH_FREQ", midHighFreq.slider)
 {
@@ -30,6 +39,10 @@ MainTabComponent::MainTabComponent (PluginProcessor& p)
     addAndMakeVisible (overallMix); // If applicable
     addAndMakeVisible (bypassButton);
     addAndMakeVisible (bassMonoButton);
+
+    addAndMakeVisible (lowSoloButton);
+    addAndMakeVisible (midSoloButton);
+    addAndMakeVisible (highSoloButton);
 
     addAndMakeVisible (lowMidFreq);
     addAndMakeVisible (midHighFreq);
@@ -80,11 +93,18 @@ void MainTabComponent::resized()
 
     flexBox.items.add(juce::FlexItem(bandSplitControls).withFlex(1));
 
+    // band mono toggles
+
+    juce::FlexBox bandMonoToggles;
+    bandMonoToggles.flexDirection = juce::FlexBox::Direction::row;
+    bandMonoToggles.items.add(juce::FlexItem(lowSoloButton).withFlex(1).withMargin(5));
+    bandMonoToggles.items.add(juce::FlexItem(midSoloButton).withFlex(1).withMargin(5));
+    bandMonoToggles.items.add(juce::FlexItem(highSoloButton).withFlex(1).withMargin(5));
+
+    flexBox.items.add(juce::FlexItem(bandMonoToggles).withFlex(1));
+
     // Layout
     flexBox.performLayout(controlArea);
-
-    // Position the spectrum analyzer
-
 
     optionsButton.setBounds(getWidth()-40, 0, 40, 40);
 

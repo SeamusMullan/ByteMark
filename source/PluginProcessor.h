@@ -115,8 +115,12 @@ public:
 
 
         // Pre Filters
-        params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{"LOW_MID_FREQ", 1}, "Low Mid Crossover Frequency", 0.0f, 8000.0f, 8000.0f));
-        params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{"MID_HIGH_FREQ", 1}, "Mid High Crossover Frequency", 8000.0f, 15000.0f, 15000.0f));
+        params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{"LOW_MID_FREQ", 1}, "Low Mid Crossover Frequency", 0.0f, 1000.0f, 1000.0f));
+        params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{"MID_HIGH_FREQ", 1}, "Mid High Crossover Frequency", 1000.0f, 15000.0f, 15000.0f));
+
+        params.push_back (std::make_unique<juce::AudioParameterBool>(juce::ParameterID{"LOW_SOLO", 1}, "Low band Solo", false));
+        params.push_back (std::make_unique<juce::AudioParameterBool>(juce::ParameterID{"MID_SOLO", 1}, "Mid band Solo", false));
+        params.push_back (std::make_unique<juce::AudioParameterBool>(juce::ParameterID{"HIGH_SOLO", 1}, "High band Solo", false));
 
         // Band Gains
         params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{"LOW_GAIN", 1}, "Low Gain", -60.0f, 10.0f, 0.0f));

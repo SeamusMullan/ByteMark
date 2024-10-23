@@ -66,6 +66,8 @@ private:
     float lowMidFreq = 8000.0f;
     float midHighFreq = 15000.0f;
 
+    bool lowSolo, midSolo, highSolo;
+
     // Band Gains
     float lowBandGain = 0.0f;
     float midBandGain = 0.0f;
