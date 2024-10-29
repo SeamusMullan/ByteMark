@@ -242,20 +242,20 @@ void PluginProcessor::processBlock (juce::AudioBuffer<float>& buffer,
     float lowMidFreq = apvts.getRawParameterValue ("LOW_MID_FREQ")->load();
     float midHighFreq = apvts.getRawParameterValue ("MID_HIGH_FREQ")->load();
 
-    lowMidCrossover.setCutoffFrequency (lowMidFreq);
-    midHighCrossover.setCutoffFrequency (midHighFreq);
+    lowMidCrossover.setCutoffFrequency (lowMidFreq);  // Low-pass filter for low band
+    midHighCrossover.setCutoffFrequency (midHighFreq); // High-pass filter for high band
 
-    // Process filters to split the signal into bands
-    lowMidCrossover.process (lowContext); // ie lowpass
-    midHighCrossover.process (midContext); // ie highpass
+    // Process each band separately
+    lowMidCrossover.process (lowContext); // Low-pass filter for low band
+    midHighCrossover.process (highContext); // High-pass filter for high band
 
-    // Calculate middle band by subtracting low and high from the original signal
+    // Process mid band (band-pass by subtracting low and high from the original)
     for (int channel = 0; channel < buffer.getNumChannels(); ++channel)
     {
         auto* originalData = buffer.getReadPointer (channel);
         auto* lowData = lowBuffer.getReadPointer (channel);
-        auto* midData = midBuffer.getWritePointer (channel);
         auto* highData = highBuffer.getReadPointer (channel);
+        auto* midData = midBuffer.getWritePointer (channel);
 
         for (int sample = 0; sample < buffer.getNumSamples(); ++sample)
         {
@@ -272,29 +272,26 @@ void PluginProcessor::processBlock (juce::AudioBuffer<float>& buffer,
     midGain.process (midContext);
     highGain.process (highContext);
 
-    // Apply band solo-ing (play only solo'd if any selected)
+    // Apply solo/mute logic
     bool lowSolo = apvts.getRawParameterValue ("LOW_SOLO")->load();
     bool midSolo = apvts.getRawParameterValue ("MID_SOLO")->load();
     bool highSolo = apvts.getRawParameterValue ("HIGH_SOLO")->load();
 
-    if (lowSolo || midSolo || highSolo)
+    float low = (lowSolo || (!lowSolo && !midSolo && !highSolo)) ? 1.0f : 0.0f;
+    float mid = (midSolo || (!lowSolo && !midSolo && !highSolo)) ? 1.0f : 0.0f;
+    float high = (highSolo || (!lowSolo && !midSolo && !highSolo)) ? 1.0f : 0.0f;
+
+    for (int channel = 0; channel < buffer.getNumChannels(); ++channel)
     {
-        float low = (lowSolo) ? 1.0f : 0.0f;
-        float mid = (midSolo) ? 1.0f : 0.0f;
-        float high = (highSolo) ? 1.0f : 0.0f;
+        auto* lowData = lowBuffer.getWritePointer (channel);
+        auto* midData = midBuffer.getWritePointer (channel);
+        auto* highData = highBuffer.getWritePointer (channel);
 
-        for (int channel = 0; channel < buffer.getNumChannels(); ++channel)
+        for (int sample = 0; sample < buffer.getNumSamples(); ++sample)
         {
-            auto* lowData = lowBuffer.getWritePointer (channel);
-            auto* midData = midBuffer.getWritePointer (channel);
-            auto* highData = highBuffer.getWritePointer (channel);
-
-            for (int sample = 0; sample < buffer.getNumSamples(); ++sample)
-            {
-                lowData[sample] *= low;
-                midData[sample] *= mid;
-                highData[sample] *= high;
-            }
+            lowData[sample] *= low;
+            midData[sample] *= mid;
+            highData[sample] *= high;
         }
     }
 
@@ -311,6 +308,8 @@ void PluginProcessor::processBlock (juce::AudioBuffer<float>& buffer,
             mainData[sample] = lowData[sample] + midData[sample] + highData[sample];
         }
     }
+
+
 
     // Apply Haas Delay
     // Retrieve the Haas delay time in samples
