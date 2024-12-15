@@ -110,8 +110,8 @@ void LPCProcessor::LPCAnalysis(juce::AudioBuffer<float>& buffer)
             double reconstructed = residual[n];
             for (int k = 1; k <= maxOrder; ++k)
                 reconstructed += lpcCoeffs[k] * residual[n - k];
-
-            signal[n] = reconstructed;
+            double blendFactor = std::min(1.0, (n - maxOrder) / 10.0);
+            signal[n] = blendFactor * reconstructed + (1.0 - blendFactor) * signal[n];
         }
 
         // Copy reconstructed signal back to buffer
@@ -123,23 +123,47 @@ void LPCProcessor::LPCAnalysis(juce::AudioBuffer<float>& buffer)
 void LPCProcessor::LevinsonDurbin(const std::vector<double>& autocorr, int order,
                     std::vector<double>& lpcCoeffs, std::vector<double>& reflectionCoeffs)
 {
-    std::vector<double> error(order + 1, 0.0);
+    // Add small epsilon to prevent division by zero
+    const double epsilon = 1e-10;
+
+    // Reset coefficient vectors
+    std::fill(lpcCoeffs.begin(), lpcCoeffs.end(), 0.0);
+    std::fill(reflectionCoeffs.begin(), reflectionCoeffs.end(), 0.0);
+
     lpcCoeffs[0] = 1.0;
-    error[0] = autocorr[0];
+    double error = autocorr[0];
+
+    if (error < epsilon) {
+        // If energy is too low, zero out coefficients
+        std::fill(lpcCoeffs.begin(), lpcCoeffs.end(), 0.0);
+        return;
+    }
 
     for (int i = 1; i <= order; ++i)
     {
+        // More robust summation
         double sum = 0.0;
         for (int j = 1; j < i; ++j)
             sum += lpcCoeffs[j] * autocorr[i - j];
 
-        reflectionCoeffs[i - 1] = (autocorr[i] - sum) / error[i - 1];
-        lpcCoeffs[i] = reflectionCoeffs[i - 1];
+        // Additional stability checks
+        double reflectionCoeff = (autocorr[i] - sum) / (error + epsilon);
 
+        // Clip reflection coefficient to prevent extreme values
+        reflectionCoeff = std::clamp(reflectionCoeff, -0.99, 0.99);
+
+        reflectionCoeffs[i - 1] = reflectionCoeff;
+        lpcCoeffs[i] = reflectionCoeff;
+
+        // Update LPC coefficients
         for (int j = 1; j < i; ++j)
-            lpcCoeffs[j] -= reflectionCoeffs[i - 1] * lpcCoeffs[i - j];
+            lpcCoeffs[j] -= reflectionCoeff * lpcCoeffs[i - j];
 
-        error[i] = error[i - 1] * (1.0 - reflectionCoeffs[i - 1] * reflectionCoeffs[i - 1]);
+        // Update error with numerical stability
+        error *= (1.0 - reflectionCoeff * reflectionCoeff);
+
+        // Prevent error from becoming too small
+        error = std::max(error, epsilon);
     }
 }
 

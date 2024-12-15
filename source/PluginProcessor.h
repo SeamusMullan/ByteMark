@@ -81,7 +81,7 @@ public:
         params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{"REFERENCE_MIX", 1}, "Reference Mix", 0.0f, 100.0f, 50.0f));
         params.push_back(std::make_unique<juce::AudioParameterBool>(juce::ParameterID{"BYPASS", 1}, "Bypass", false));
 
-        params.push_back(std::make_unique<juce::AudioParameterInt>(juce::ParameterID{"LPC_ORDER", 1}, "LPC Order", 1, 24, 10));
+        params.push_back(std::make_unique<juce::AudioParameterInt>(juce::ParameterID{"LPC_ORDER", 1}, "LPC Order", 1, 24, 4));
         params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{"LPC_ALPHA", 1}, "LPC Alpha", 0.01f, 1.0f, 0.95f));
 
         // Visualizer settings
@@ -92,7 +92,7 @@ public:
 
 private:
 
-    LPCProcessor lpcEffect = LPCProcessor(16, 0.95f);
+    LPCProcessor lpcEffect = LPCProcessor(4, 0.95f);
 
     ParameterManager paramManager;
 
