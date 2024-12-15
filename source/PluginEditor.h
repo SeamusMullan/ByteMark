@@ -4,10 +4,9 @@
 #include "BinaryData.h"
 #include "melatonin_inspector/melatonin_inspector.h"
 #include "MainTabComponent.h"
-#include "HaasDelayTabComponent.h"
 // #include "ChorusTabComponent.h"
 // #include "ConvolutionTabComponent.h"
-#include "CompressorTabComponent.h"
+#include "ReferenceTabComponent.h"
 // Include other tab components as needed
 
 //==============================================================================
@@ -36,11 +35,7 @@ private:
 
     // Tab Components
     MainTabComponent mainTab;
-    HaasDelayTabComponent haasDelayTab;
-    // ChorusTabComponent chorusTab;
-    // ConvolutionTabComponent convolutionTab;
-    CompressorTabComponent compressorTab;
-    // Add other tabs as needed
+    ReferenceTabComponent referenceTab;
 
 
     // Custom LookAndFeel for styling

@@ -5,24 +5,16 @@ PluginEditor::PluginEditor (PluginProcessor& p)
       processorRef (p),
       spectrumAnalyzer (p),
       mainTab (processorRef),
-      haasDelayTab (processorRef),
-      // chorusTab (processorRef),
-      // convolutionTab (processorRef),
-      compressorTab (processorRef)
+      referenceTab (processorRef)
 {
     // Set custom LookAndFeel
     setLookAndFeel(&customLookAndFeel);
 
     // Add tabs
     tabbedComponent.addTab("Main", juce::Colours::darkgrey, &mainTab, false);
-    tabbedComponent.addTab("Haas Delay", juce::Colours::darkgrey, &haasDelayTab, false);
-    // tabbedComponent.addTab("Chorus", juce::Colours::darkgrey, &chorusTab, false);
-    // tabbedComponent.addTab("Convolution", juce::Colours::darkgrey, &convolutionTab, false);
-    tabbedComponent.addTab("Compressor", juce::Colours::darkgrey, &compressorTab, false);
-    // Add other tabs as needed
+    tabbedComponent.addTab("Reference", juce::Colours::darkgrey, &referenceTab, false);
 
     addAndMakeVisible(tabbedComponent);
-
     addAndMakeVisible (spectrumAnalyzer);
 
 
@@ -54,7 +46,6 @@ void PluginEditor::paint (juce::Graphics& g)
     // Fill background
     g.fillAll (juce::Colours::black);
     spectrumAnalyzer.setVisualizerSmoothingValue (processorRef.apvts.getRawParameterValue ("VIS_SMOOTH")->load());
-
 }
 
 void PluginEditor::resized()
@@ -67,7 +58,7 @@ void PluginEditor::resized()
     tabbedComponent.setBounds(mainArea);
     spectrumAnalyzer.setBounds(visualizerArea);
 
-    // Position the Melatonin Inspector Button at the bottom right corner
+    // Position the Melatonin Inspector Button in the bottom right corner
     inspectButton.setBounds(getWidth() - 80 - 10, getHeight() - 30 - 10, 80, 30);
 
 }

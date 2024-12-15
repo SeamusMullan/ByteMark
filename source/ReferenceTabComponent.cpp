@@ -2,10 +2,9 @@
 // Created by Seamus Mullan on 30/09/2024.
 //
 
-#include "CompressorTabComponent.h"
+#include "ReferenceTabComponent.h"
 
-
-CompressorTabComponent::CompressorTabComponent(PluginProcessor& p)
+ReferenceTabComponent::ReferenceTabComponent(PluginProcessor& p)
     : processorRef(p),
       // haasTime("Haas Time"),
       // haasMix("Haas Mix"),
@@ -31,16 +30,16 @@ CompressorTabComponent::CompressorTabComponent(PluginProcessor& p)
     addAndMakeVisible(mix);
 }
 
-CompressorTabComponent::~CompressorTabComponent()
+ReferenceTabComponent::~ReferenceTabComponent()
 {
 }
 
-void CompressorTabComponent::paint(juce::Graphics& g)
+void ReferenceTabComponent::paint(juce::Graphics& g)
 {
     g.fillAll(juce::Colours::darkgrey);
 }
 
-void CompressorTabComponent::resized()
+void ReferenceTabComponent::resized()
 {
     auto area = getLocalBounds().reduced(10);
 

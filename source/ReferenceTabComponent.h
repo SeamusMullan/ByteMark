@@ -17,11 +17,11 @@
 #include "SliderWithLabel.h"
 #include "SliderWithLabel.h"
 
-class CompressorTabComponent : public juce::Component
+class ReferenceTabComponent : public juce::Component
 {
 public:
-    CompressorTabComponent(PluginProcessor& p);
-    ~CompressorTabComponent() override;
+    ReferenceTabComponent(PluginProcessor& p);
+    ~ReferenceTabComponent() override;
 
     void paint(juce::Graphics&) override;
     void resized() override;
@@ -45,7 +45,7 @@ private:
     Attachment releaseAttachment;
     Attachment mixAttachment;
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(CompressorTabComponent)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ReferenceTabComponent)
 };
 
 

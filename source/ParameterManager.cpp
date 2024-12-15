@@ -89,83 +89,12 @@ void ParameterManager::updateParameters()
     bypass = apvts.getRawParameterValue("BYPASS")->load() > 0.5f;
     visSmooth = apvts.getRawParameterValue("VIS_SMOOTH")->load();
 
-    // Pre Filters
-    lowMidFreq = apvts.getRawParameterValue("LOW_MID_FREQ")->load();
-    midHighFreq = apvts.getRawParameterValue("MID_HIGH_FREQ")->load();
 
-    lowSolo = apvts.getRawParameterValue ("LOW_SOLO")->load();
-    midSolo = apvts.getRawParameterValue ("MID_SOLO")->load();
-    highSolo = apvts.getRawParameterValue ("HIGH_SOLO")->load();
-
-    // Band Gains
-    lowBandGain = apvts.getRawParameterValue("LOW_GAIN")->load();
-    midBandGain = apvts.getRawParameterValue("MID_GAIN")->load();
-    highBandGain = apvts.getRawParameterValue("HIGH_GAIN")->load();
-
-    // Haas Delay
-    // haasTime = apvts.getRawParameterValue("HAAS_TIME")->load(); // do this in process block, depends on samplerate
-    haasMix = apvts.getRawParameterValue("HAAS_MIX")->load();
-
-    // Chorus
-    chorusRate = apvts.getRawParameterValue("CHORUS_RATE")->load();
-    chorusDepth = apvts.getRawParameterValue("CHORUS_DEPTH")->load();
-    chorusCentreDelay = apvts.getRawParameterValue("CHORUS_CENTRE_DELAY")->load();
-    chorusFeedback = apvts.getRawParameterValue("CHORUS_FEEDBACK")->load();
-    chorusMix = apvts.getRawParameterValue("CHORUS_MIX")->load();
-
-    // Convolution
-    convolutionMix = apvts.getRawParameterValue("CONV_MIX")->load();
-
-    // Compressor
-    compressorThreshold = apvts.getRawParameterValue("COMPRESSOR_THRESHOLD")->load();
-    compressorRatio = apvts.getRawParameterValue("COMPRESSOR_RATIO")->load();
-    compressorAttack = apvts.getRawParameterValue("COMPRESSOR_ATTACK")->load();
-    compressorRelease = apvts.getRawParameterValue("COMPRESSOR_RELEASE")->load();
-    compressorMix = apvts.getRawParameterValue("COMPRESSOR_MIX")->load();
 }
 
-void ParameterManager::updateEffectParameters(juce::dsp::Compressor<float>& compressor,
-                                             juce::dsp::LinkwitzRileyFilter<float>& preLP,
-                                             juce::dsp::LinkwitzRileyFilter<float>& preHP,
-                                             juce::dsp::Gain<float>& lowGain,
-                                             juce::dsp::Gain<float>& midGain,
-                                             juce::dsp::Gain<float>& highGain,
-                                             juce::dsp::DelayLine<float>& haasDelay,
-                                             juce::dsp::Chorus<float>& chorus,
-                                             juce::dsp::Convolution& convolution)
+void ParameterManager::updateEffectParameters()
 {
     // Update the effect instances with the new parameter values
 
-    // Update compressor
-    compressor.setThreshold(compressorThreshold);
-    compressor.setRatio(compressorRatio);
-    compressor.setAttack(compressorAttack);
-    compressor.setRelease(compressorRelease);
-    // Compressor mix can be handled in the processBlock when applying the effect
 
-    // Update pre-filters (Linkwitz-Riley filters)
-    preLP.setCutoffFrequency(lowMidFreq);
-    preHP.setCutoffFrequency(midHighFreq);
-
-    // Update band gains
-    lowGain.setGainDecibels(lowBandGain);
-    midGain.setGainDecibels(midBandGain);
-    highGain.setGainDecibels(highBandGain);
-
-    // Update Haas Delay
-    auto haasTimeSamples = haasTime;
-    haasDelay.setDelay(haasTime); // Time in samples
-    // Haas mix can be handled in the processBlock
-
-    // Update Chorus
-    chorus.setRate(chorusRate);
-    chorus.setDepth(chorusDepth);
-    chorus.setCentreDelay(chorusCentreDelay);
-    chorus.setFeedback(chorusFeedback);
-    chorus.setMix(chorusMix / 100.0f); // Assuming mix is in percentage
-
-    // Update Convolution
-    // For convolution mix, handle in processBlock or set a mix parameter if available
-
-    // Additional effects can be updated similarly
 }
