@@ -35,34 +35,19 @@ private:
     // UI Components
     SliderWithLabel inputGain;
     SliderWithLabel outputGain;
-    SliderWithLabel bassMonoFreq;
     SliderWithLabel overallMix; // If you have an overall mix parameter
-    juce::ToggleButton bassMonoButton;
     juce::ToggleButton bypassButton;
-    juce::ToggleButton lowSoloButton, midSoloButton, highSoloButton;
-
-    SliderWithLabel lowMidFreq;
-    SliderWithLabel midHighFreq;
 
     // Attachments
     using Attachment = juce::AudioProcessorValueTreeState::SliderAttachment;
 
     Attachment inputGainAttachment;
     Attachment outputGainAttachment;
-    Attachment bassMonoFreqAttachment;
     Attachment overallMixAttachment; // If applicable
 
     using Button = juce::AudioProcessorValueTreeState::ButtonAttachment;
 
     Button bypassAttachment;
-    Button bassMonoButtonAttachment;
-
-    Button lowSoloAttachment;
-    Button midSoloAttachment;
-    Button highSoloAttachment;
-
-    Attachment lowMidFreqAttachment;
-    Attachment midHighFreqAttachment;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MainTabComponent)
 };

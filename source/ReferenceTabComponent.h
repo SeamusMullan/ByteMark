@@ -15,7 +15,6 @@
 #include <juce_gui_basics/juce_gui_basics.h>
 #include "PluginProcessor.h"
 #include "SliderWithLabel.h"
-#include "SliderWithLabel.h"
 
 class ReferenceTabComponent : public juce::Component
 {
@@ -30,19 +29,11 @@ private:
     PluginProcessor& processorRef;
 
     // UI Components
-    SliderWithLabel threshold;
-    SliderWithLabel ratio;
-    SliderWithLabel attack;
-    SliderWithLabel release;
     SliderWithLabel mix;
 
     // Attachments
     using Attachment = juce::AudioProcessorValueTreeState::SliderAttachment;
 
-    Attachment thresholdAttachment;
-    Attachment ratioAttachment;
-    Attachment attackAttachment;
-    Attachment releaseAttachment;
     Attachment mixAttachment;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ReferenceTabComponent)
