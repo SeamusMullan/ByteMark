@@ -8,7 +8,7 @@ ReferenceTabComponent::ReferenceTabComponent(PluginProcessor& p)
     : processorRef(p),
 
       mix ("Mix"),
-      mixAttachment(processorRef.apvts, "COMPRESSOR_MIX", mix.slider)
+      mixAttachment(processorRef.apvts, "REFERENCE_MIX", mix.slider)
 
 
 {

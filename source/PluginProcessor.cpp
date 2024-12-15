@@ -1,6 +1,7 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 
+
 //==============================================================================
 PluginProcessor::PluginProcessor()
      : AudioProcessor (BusesProperties()
@@ -94,6 +95,9 @@ void PluginProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
     spec.numChannels = getTotalNumInputChannels();
     spec.maximumBlockSize = samplesPerBlock;
 
+    lpcEffect.prepareToPlay (sampleRate, samplesPerBlock);
+
+
     juce::ignoreUnused (sampleRate, samplesPerBlock);
 }
 
@@ -173,6 +177,9 @@ void PluginProcessor::processBlock (juce::AudioBuffer<float>& buffer,
     paramManager.updateParameters();
     // paramManager.updateEffectParameters ();
 
+    lpcEffect.setMaxOrder (apvts.getRawParameterValue("LPC_ORDER")->load());
+    lpcEffect.setPreEmphasisAlpha (apvts.getRawParameterValue("LPC_ALPHA")->load());
+
     // Check for bypass
     if (paramManager.isBypassed())
     {
@@ -184,7 +191,10 @@ void PluginProcessor::processBlock (juce::AudioBuffer<float>& buffer,
     buffer.applyGain (juce::Decibels::decibelsToGain (paramManager.getInGain()));
 
     // Prepare the main audio block
-    juce::dsp::AudioBlock<float> mainBlock (buffer);
+    //juce::dsp::AudioBlock<float> mainBlock (buffer);
+
+    lpcEffect.process (buffer);
+
 
     // Apply output gain
     buffer.applyGain (juce::Decibels::decibelsToGain (paramManager.getOutGain()));

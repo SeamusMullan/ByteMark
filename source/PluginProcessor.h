@@ -4,6 +4,7 @@
 #include <juce_dsp/juce_dsp.h>
 #include <atomic>
 #include "ParameterManager.h"
+#include "LPCProcessor.h"
 
 #if (MSVC)
 #include "ipps.h"
@@ -77,7 +78,11 @@ public:
         // Main Settings
         params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{"IN", 1}, "In Gain", -60.0f, 10.0f, 0.0f));
         params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{"OUT", 1}, "Out Gain", -60.0f, 10.0f, 0.0f));
+        params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{"REFERENCE_MIX", 1}, "Reference Mix", 0.0f, 100.0f, 50.0f));
         params.push_back(std::make_unique<juce::AudioParameterBool>(juce::ParameterID{"BYPASS", 1}, "Bypass", false));
+
+        params.push_back(std::make_unique<juce::AudioParameterInt>(juce::ParameterID{"LPC_ORDER", 1}, "LPC Order", 1, 18, 12));
+        params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{"LPC_ALPHA", 1}, "LPC Alpha", 0.01f, 1.0f, 0.95f));
 
         // Visualizer settings
         params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{"VIS_SMOOTH", 1}, "Visualizer Smoothing Value", 0.0f, 1.0f, 0.69f));
@@ -87,25 +92,11 @@ public:
 
 private:
 
+    LPCProcessor lpcEffect = LPCProcessor(16, 0.95f);
+
     ParameterManager paramManager;
 
-    juce::dsp::Compressor<float> compressor;
-
-    juce::dsp::IIR::Filter<float> bassMonoFilter; // IIR has less latency (generally), may change to FIR because of linear phase...
-
-    // Add additional filters for splitting
-    juce::dsp::LinkwitzRileyFilter<float> lowMidCrossover;
-    juce::dsp::LinkwitzRileyFilter<float> midHighCrossover;
-    juce::dsp::Gain<float> lowGain, midGain, highGain;
-
-    juce::dsp::DelayLine<float> haasDelay; // 5-35  ms
-    juce::dsp::Chorus<float> chorus;
-    // juce::dsp::WaveShaper<float> waveshaper;
-    juce::dsp::Convolution convolution; // ir for cabinets or reverb?
-
-
     // visualiser
-
     juce::AudioBuffer<float> midBuffer;
     juce::AudioBuffer<float> sideBuffer;
 

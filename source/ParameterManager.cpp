@@ -23,7 +23,7 @@ void ParameterManager::mapParametersToEffects()
         apvts.getParameter("COMPRESSOR_RATIO"),
         apvts.getParameter("COMPRESSOR_ATTACK"),
         apvts.getParameter("COMPRESSOR_RELEASE"),
-        apvts.getParameter("COMPRESSOR_MIX")
+        apvts.getParameter("REFERENCE_MIX")
     };
 
     // Pre Filters
