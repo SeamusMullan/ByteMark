@@ -199,7 +199,7 @@ void PluginProcessor::processBlock (juce::AudioBuffer<float>& buffer,
     lpcEffect.setPreEmphasisAlpha(apvts.getRawParameterValue("LPC_ALPHA")->load());
 
     // Process the buffer
-    lpcEffect.process(processedBuffer);
+    lpcEffect.process(buffer);
 
     // Apply output gain
     float outputGain = juce::Decibels::decibelsToGain(paramManager.getOutGain());

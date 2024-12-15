@@ -76,7 +76,7 @@ juce_add_plugin("${PROJECT_NAME}"
     # Change me!
     # A unique four-character plugin id
     # Note: this must have at least one upper-case character
-    PLUGIN_CODE O84j
+    PLUGIN_CODE O64j
     FORMATS "${FORMATS}"
 
     # The name of your final executable
