@@ -1,10 +1,10 @@
 # ByteMark
 **ByteMark** is an audio plugin that emulates the nostalgic sounds of vintage electronics and vocoders.
-It features two core effects: Linear Prediction Codec (LPC) Processing and a Bitcrusher / Redux effect, blending retro aesthetics.
+It features two core effects: Linear Prediction Coding (LPC) Processing and a Bitcrusher / Redux effect, blending retro aesthetics.
 
 ## Features
 
-- **Authentic LPC Vocoder**: I've implemented a Linear Prediction Codec to emulate the vintage vocal effects and robotic tones from old talkboxes and voicebox toys.
+- **Authentic LPC Vocoder**: I've implemented a Linear Prediction Coding to emulate the vintage vocal effects and robotic tones from old talkboxes and voicebox toys.
 - **Precision Bit Reduction**: Control bit depth and sampling rate to really dial the years back.
 - **Multi-Platform Compatibility**: Available as a VST3 and AU plugin, ensuring seamless integration with popular DAWs.
 - **Simple-to-Use Interface**: A sleek, user-friendly design that puts powerful sound shaping tools at your fingertips.
