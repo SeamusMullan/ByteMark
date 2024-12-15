@@ -1,8 +1,6 @@
 # ByteMark
-
-**ByteMark** is a versatile audio processing plugin that evokes the nostalgic sounds of vintage electronics and vocoders. It features two core effects: Linear Prediction Codec (LPC) Processing and a Bitcrusher / Redux effect, blending retro aesthetics with modern technology.
-
 ---
+**ByteMark** is a versatile audio processing plugin that evokes the nostalgic sounds of vintage electronics and vocoders. It features two core effects: Linear Prediction Codec (LPC) Processing and a Bitcrusher / Redux effect, blending retro aesthetics with modern technology.
 
 ## Features
 
@@ -12,14 +10,10 @@
 - **Simple-to-Use Interface**: A sleek, user-friendly design that puts powerful sound shaping tools at your fingertips.
 - **Efficient DSP**: ByteMark is designed to maximize performance, minimizing CPU usage so you can run it no matter how old the PC (with a few limits of course).
 
----
-
 ## How It Works
 
 - **LPC Vocoder Emulation**: At its core, the LPC algorithm analyzes the input signal to predict and synthesize its spectral content. By modeling this behavior, ByteMark delivers realistic vocoder effects reminiscent of early digital audio technologies. It also gets used in a lot of telecommunications stuff too.
 - **Bitcrusher / Redux**: By reducing bit depth and sample rate, ByteMark introduces digital artifacts that range from a little crunch to outright ruining your audio, but we all know that's fun sometimes.
-
----
 
 ## Installation
 
@@ -30,8 +24,6 @@
    - Windows: `C:\Program Files\Common Files\VST3`
    - Linux: You probably already know where to put the files....
 
----
-
 ## Roadmap
 
 Future updates will include:
@@ -40,16 +32,8 @@ Future updates will include:
 - Enhanced LPC customization options
 - Quality of Life Improvements
 
-
-
----
-
 ## Feedback
 
 I’d love to hear your thoughts! Feel free to open issues or share feature requests on the [GitHub Issues](#) page.
 
 If you spot a feature you would like included, make a PR and let me know, I'd love to make this plugin better!
-
----
-
-##
