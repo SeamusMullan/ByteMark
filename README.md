@@ -1,5 +1,4 @@
 # ByteMark
----
 **ByteMark** is a versatile audio processing plugin that evokes the nostalgic sounds of vintage electronics and vocoders. It features two core effects: Linear Prediction Codec (LPC) Processing and a Bitcrusher / Redux effect, blending retro aesthetics with modern technology.
 
 ## Features
