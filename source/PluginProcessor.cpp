@@ -90,15 +90,12 @@ void PluginProcessor::changeProgramName (int index, const juce::String& newName)
 //==============================================================================
 void PluginProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
-    juce::dsp::ProcessSpec spec{};
-    spec.sampleRate = sampleRate;
-    spec.numChannels = getTotalNumInputChannels();
-    spec.maximumBlockSize = samplesPerBlock;
+    // Initialize LPC effect with current parameters
+    lpcEffect.prepareToPlay(sampleRate, samplesPerBlock);
 
-    lpcEffect.prepareToPlay (sampleRate, samplesPerBlock);
-
-
-    juce::ignoreUnused (sampleRate, samplesPerBlock);
+    // Optional: Set initial parameters
+    lpcEffect.setMaxOrder(static_cast<int>(apvts.getRawParameterValue("LPC_ORDER")->load()));
+    lpcEffect.setPreEmphasisAlpha(apvts.getRawParameterValue("LPC_ALPHA")->load());
 }
 
 void PluginProcessor::releaseResources()
@@ -172,35 +169,47 @@ bool PluginProcessor::FifoQueue::pull(juce::AudioBuffer<float>& buffer)
 void PluginProcessor::processBlock (juce::AudioBuffer<float>& buffer,
                                     juce::MidiBuffer& midiMessages)
 {
+    // Ignore MIDI messages if not used
+    juce::ignoreUnused(midiMessages);
+
+    // If no audio, return early
+    if (buffer.getNumChannels() == 0)
+        return;
 
     // Update parameters
     paramManager.updateParameters();
-    // paramManager.updateEffectParameters ();
-
-    lpcEffect.setMaxOrder (apvts.getRawParameterValue("LPC_ORDER")->load());
-    lpcEffect.setPreEmphasisAlpha (apvts.getRawParameterValue("LPC_ALPHA")->load());
 
     // Check for bypass
     if (paramManager.isBypassed())
     {
-        // Bypass processing
+        // Clear the buffer if bypassed
+        buffer.clear();
         return;
     }
 
+    // Prepare a copy of the input buffer to process
+    juce::AudioBuffer<float> processedBuffer(buffer);
+
     // Apply input gain
-    buffer.applyGain (juce::Decibels::decibelsToGain (paramManager.getInGain()));
+    float inputGain = juce::Decibels::decibelsToGain(paramManager.getInGain());
+    processedBuffer.applyGain(inputGain);
 
-    // Prepare the main audio block
-    //juce::dsp::AudioBlock<float> mainBlock (buffer);
+    // Update LPC parameters
+    lpcEffect.setMaxOrder(static_cast<int>(apvts.getRawParameterValue("LPC_ORDER")->load()));
+    lpcEffect.setPreEmphasisAlpha(apvts.getRawParameterValue("LPC_ALPHA")->load());
 
-    lpcEffect.process (buffer);
-
+    // Process the buffer
+    lpcEffect.process(processedBuffer);
 
     // Apply output gain
-    buffer.applyGain (juce::Decibels::decibelsToGain (paramManager.getOutGain()));
+    float outputGain = juce::Decibels::decibelsToGain(paramManager.getOutGain());
+    processedBuffer.applyGain(outputGain);
 
-    // Now push the processed buffer into the FIFO
-    fifoQueue.push (buffer);
+    // Copy processed buffer back to original
+    buffer.makeCopyOf(processedBuffer);
+
+    // Push to FIFO for visualization
+    fifoQueue.push(buffer);
 }
 
 
