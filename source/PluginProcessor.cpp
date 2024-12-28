@@ -1,6 +1,9 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 #include "LPCProcessor.h"
+#include "ProtectYourEars.h"
+
+bool debugAudioProtection = false;
 
 //==============================================================================
 PluginProcessor::PluginProcessor()
@@ -14,7 +17,7 @@ PluginProcessor::PluginProcessor()
                        ),
     apvts(*this, nullptr, "Parameters", createParameterLayout()),
     paramManager(apvts),
-    lpcProcessor(6, 2048)
+    lpcProcessor(6, 1024)
 {
 }
 
@@ -92,7 +95,7 @@ void PluginProcessor::changeProgramName (int index, const juce::String& newName)
 void PluginProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
     // Initialize LPC effect with current parameters
-    lpcProcessor.setWindowSize(samplesPerBlock);
+    lpcProcessor.setWindowSize(samplesPerBlock/2);
 }
 
 void PluginProcessor::releaseResources()
@@ -163,40 +166,57 @@ bool PluginProcessor::FifoQueue::pull(juce::AudioBuffer<float>& buffer)
     return true;
 }
 
-void PluginProcessor::processBlock (juce::AudioBuffer<float>& buffer,
+void PluginProcessor::processBlock (juce::AudioBuffer<float>& inputBuffer,
                                     juce::MidiBuffer& midiMessages)
 {
     // Ignore MIDI messages if not used
     juce::ignoreUnused(midiMessages);
 
-
     // Update parameters
     paramManager.updateParameters();
+
     // Check for bypass
     if (paramManager.isBypassed())
     {
+        fifoQueue.push(inputBuffer);
         return;
     }
 
+    lpcProcessor.setPitchDetectionEnabled (paramManager.getPitchDetection());
+
     // Prepare a copy of the input buffer to process
-    juce::AudioBuffer<float> processedBuffer(buffer);
+    juce::AudioBuffer<float> processedBuffer;
+    processedBuffer.makeCopyOf(inputBuffer);
+
 
     // Apply input gain
     float inputGain = juce::Decibels::decibelsToGain(paramManager.getInGain());
-    buffer.applyGain(inputGain);
+    inputBuffer.applyGain(inputGain);
 
     // Update LPCProcessor parameters
-    lpcProcessor.setLpcOrder(apvts.getRawParameterValue("LPC_ORDER")->load());
+    lpcProcessor.setLpcOrder(static_cast<int>(apvts.getRawParameterValue ("LPC_ORDER")->load()));
 
     // Apply LPC processing
-    lpcProcessor.process(buffer, processedBuffer);
+    lpcProcessor.process(inputBuffer, processedBuffer);
 
     float outputGain = juce::Decibels::decibelsToGain(paramManager.getOutGain());
     processedBuffer.applyGain(outputGain);
 
-    // copy to original, send to visualizer
-    buffer.makeCopyOf(processedBuffer);
-    fifoQueue.push(buffer);
+    // copy to original for output, send to visualizer
+    inputBuffer.makeCopyOf(processedBuffer);
+    fifoQueue.push(inputBuffer);
+
+    protectYourEars(inputBuffer.getWritePointer(0), inputBuffer.getNumSamples());
+    protectYourEars(inputBuffer.getWritePointer(1), inputBuffer.getNumSamples());
+
+    // #ifdef JUCE_DEBUG
+    // if (debugAudioProtection)
+    // {
+    //     protectYourEars(inputBuffer.getWritePointer(0), inputBuffer.getNumSamples());
+    //     protectYourEars(inputBuffer.getWritePointer(1), inputBuffer.getNumSamples());
+    // }
+    //
+    // #endif
 }
 
 

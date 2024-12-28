@@ -34,8 +34,7 @@ public:
     float getInGain() const { return inGain; }
     float getOutGain() const { return outGain; }
     float getVisSmooth() const { return visSmooth; }
-
-    // ... (additional accessors if needed)
+    bool getPitchDetection() const { return pitchDetection; }
 
 private:
     juce::AudioProcessorValueTreeState& apvts;
@@ -46,12 +45,15 @@ private:
     // Internal function to map parameter IDs to effects
     void mapParametersToEffects();
 
+
     // Parameters
     float inGain = 0.0f;
     float outGain = 0.0f;
-
     bool bypass = false;
     float visSmooth = 0.69f;
+    int lpcOrder = 10;
+    float lpcAlpha = 0.5f;
+    bool pitchDetection = false;
 };
 
 

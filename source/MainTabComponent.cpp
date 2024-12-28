@@ -75,7 +75,14 @@ void MainTabComponent::buttonClicked(juce::Button* button)
 {
     if (button == &optionsButton)
     {
-        auto optionsMenu = std::make_unique<OptionsMenu>(processorRef);
-        juce::CallOutBox::launchAsynchronously(std::move(optionsMenu), optionsButton.getScreenBounds(), nullptr);
+        try
+        {
+            auto optionsMenu = std::make_unique<OptionsMenu>(processorRef);
+            juce::CallOutBox::launchAsynchronously(std::move(optionsMenu), optionsButton.getScreenBounds(), nullptr);
+        }
+        catch (const std::exception& e)
+        {
+            DBG("Exception in OptionsMenu: " << e.what());
+        }
     }
 }

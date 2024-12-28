@@ -42,11 +42,12 @@ private:
                    std::vector<float>& signalPower,
                    std::vector<float>& pitchFrequencies);
 
-    void decodeLPC(const std::vector<std::vector<float>>& lpcCoefficients,
-                   const std::vector<float>& signalPower,
-                   const std::vector<float>& pitchFrequencies,
-                   size_t numSegments,
-                   std::vector<std::vector<float>>& synthesizedData);
+    void decodeLPC (const std::vector<std::vector<float>>& lpcCoefficients,
+        const std::vector<float>& signalPower,
+        const std::vector<float>& pitchFrequencies,
+        size_t numSegments,
+        std::vector<std::vector<float>>& synthesizedData);
+    void computeAutocorrelation (const float* input, size_t numSamples, int order, std::vector<float>& autocorrelation);
 
     void computeLpc(const float* input, size_t numSamples, int order,
                     std::vector<float>& coefficients, float& power);

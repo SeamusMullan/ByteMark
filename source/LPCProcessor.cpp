@@ -13,7 +13,6 @@ LPCProcessor::LPCProcessor(int lpcOrder, int windowSize)
 
 LPCProcessor::~LPCProcessor() {}
 
-
 void LPCProcessor::setWindowSize(int newSize)
 {
     windowSize = newSize;
@@ -128,20 +127,67 @@ void LPCProcessor::decodeLPC(const std::vector<std::vector<float>>& lpcCoefficie
     }
 }
 
+
+void LPCProcessor::computeAutocorrelation(const float* input, size_t numSamples, int order, std::vector<float>& autocorrelation)
+{
+    size_t fftSize = juce::nextPowerOfTwo(numSamples + order);
+    std::vector<float> fftBuffer(fftSize * 2, 0.0f);
+
+    // Copy input into FFT buffer
+    std::copy(input, input + numSamples, fftBuffer.begin());
+
+    // Perform FFT
+    juce::dsp::FFT fft(static_cast<int>(std::log2(fftSize)));
+    fft.performRealOnlyForwardTransform(fftBuffer.data());
+
+    // Compute power spectrum (complex multiplication)
+    for (size_t i = 0; i < fftSize; ++i)
+    {
+        float real = fftBuffer[2 * i];
+        float imag = fftBuffer[2 * i + 1];
+        fftBuffer[2 * i] = real * real + imag * imag; // Magnitude squared
+        fftBuffer[2 * i + 1] = 0.0f; // Zero imaginary part
+    }
+
+    // Perform inverse FFT
+    fft.performRealOnlyInverseTransform(fftBuffer.data());
+
+    // Extract autocorrelation values
+    autocorrelation.resize(order + 1);
+    for (int i = 0; i <= order; ++i)
+    {
+        autocorrelation[i] = fftBuffer[i] / numSamples;
+    }
+}
+
+
 void LPCProcessor::computeLpc(const float* input, size_t numSamples, int order,
                               std::vector<float>& coefficients, float& power)
 {
-    std::vector<float> autocorrelation(order + 1, 0.0f);
-
-    for (int lag = 0; lag <= order; ++lag)
+    if (numSamples <= order)
     {
-        for (size_t i = lag; i < numSamples; ++i)
-        {
-            autocorrelation[lag] += input[i] * input[i - lag];
-        }
+        DBG("Insufficient samples for LPC computation!");
+        coefficients.assign(order, 0.0f);
+        power = 0.0f;
+        return;
     }
 
-    power = autocorrelation[0];
+    std::vector<float> autocorrelation(order + 1, 0.0f);
+
+    // Compute autocorrelation O(n^2)
+    // for (int lag = 0; lag <= order; ++lag)
+    // {
+    //     for (size_t i = lag; i < numSamples; ++i)
+    //     {
+    //         autocorrelation[lag] += input[i] * input[i - lag];
+    //     }
+    // }
+
+    computeAutocorrelation(input, numSamples, order, autocorrelation);
+
+    power = std::max(autocorrelation[0], 1e-6f); // Prevent divide-by-zero or silent output
+    coefficients.assign(order, 0.0f);
+
     std::vector<float> reflection(order, 0.0f);
     std::vector<float> error(order + 1, power);
 
@@ -152,17 +198,41 @@ void LPCProcessor::computeLpc(const float* input, size_t numSamples, int order,
         {
             sum += coefficients[j - 1] * autocorrelation[i - j];
         }
-        reflection[i - 1] = (autocorrelation[i] - sum) / error[i - 1];
-        coefficients[i - 1] = reflection[i - 1];
 
+        if (error[i - 1] <= 1e-6f)
+        {
+            DBG("Numerical instability detected in computeLpc! Clamping reflection coefficient.");
+            reflection[i - 1] = 0.0f;
+        }
+        else
+        {
+            reflection[i - 1] = std::clamp((autocorrelation[i] - sum) / error[i - 1], -1.0f, 1.0f);
+        }
+
+        // Update coefficients
+        std::vector<float> tempCoefficients = coefficients;
         for (int j = 0; j < i / 2; ++j)
         {
-            float temp = coefficients[j];
-            coefficients[j] += reflection[i - 1] * coefficients[i - j - 2];
-            coefficients[i - j - 2] += reflection[i - 1] * temp;
+            coefficients[j] = tempCoefficients[j] + reflection[i - 1] * tempCoefficients[i - j - 2];
+            coefficients[i - j - 2] = tempCoefficients[i - j - 2] + reflection[i - 1] * tempCoefficients[j];
         }
+        coefficients[i - 1] = reflection[i - 1];
+
         error[i] = error[i - 1] * (1.0f - reflection[i - 1] * reflection[i - 1]);
     }
+
+    // Debugging
+    DBG("Autocorrelation: ");
+    for (auto value : autocorrelation)
+        DBG(value);
+
+    DBG("Reflection Coefficients: ");
+    for (auto value : reflection)
+        DBG(value);
+
+    DBG("Final LPC Coefficients: ");
+    for (auto coef : coefficients)
+        DBG(coef);
 }
 
 float LPCProcessor::detectPitch(const std::vector<float>& segment)

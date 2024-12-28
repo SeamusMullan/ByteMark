@@ -79,11 +79,12 @@ public:
         // Main Settings
         params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{"IN", 1}, "In Gain", -60.0f, 10.0f, 0.0f));
         params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{"OUT", 1}, "Out Gain", -60.0f, 10.0f, 0.0f));
-        params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{"REFERENCE_MIX", 1}, "Reference Mix", 0.0f, 100.0f, 50.0f));
+        params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{"OVERALL_MIX", 1}, "Overall Mix", 0.0f, 100.0f, 50.0f));
         params.push_back(std::make_unique<juce::AudioParameterBool>(juce::ParameterID{"BYPASS", 1}, "Bypass", false));
 
         params.push_back(std::make_unique<juce::AudioParameterInt>(juce::ParameterID{"LPC_ORDER", 1}, "LPC Order", 1, 24, 10));
         params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{"LPC_ALPHA", 1}, "LPC Alpha", 0.01f, 1.0f, 0.95f));
+        params.push_back(std::make_unique<juce::AudioParameterBool>(juce::ParameterID{"PITCH_DETECTION", 1}, "Enable Pitch Detection", false));
 
         // Visualizer settings
         params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{"VIS_SMOOTH", 1}, "Visualizer Smoothing Value", 0.0f, 1.0f, 0.69f));
