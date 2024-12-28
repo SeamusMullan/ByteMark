@@ -23,17 +23,46 @@ void LPCProcessor::process(const juce::AudioBuffer<float>& inputBuffer, juce::Au
 {
     const int numSamples = inputBuffer.getNumSamples();
     const int numChannels = inputBuffer.getNumChannels();
+    const double currentSampleRate = sampleRate; // Assume `sampleRate` is a member variable representing the current rate
+    const double resamplingFactor = targetSampleRate / currentSampleRate;
 
     outputBuffer.clear();
 
+    // resample the input buffer and adjust the number of samples to represent it
+    // resample to ~8k
+
+    const int resampledNumSamples = static_cast<int>(numSamples * resamplingFactor);
+    juce::AudioBuffer<float> resampledBuffer(numChannels, resampledNumSamples);
+
+    // resample the input
     for (int channel = 0; channel < numChannels; ++channel)
     {
+        // Resample the input signal
         const float* input = inputBuffer.getReadPointer(channel);
+        float* resampled = resampledBuffer.getWritePointer(channel);
+
+        // Resampling using linear interpolation
+        for (int i = 0; i < resampledNumSamples; ++i)
+        {
+            float inputPosition = i / resamplingFactor;
+            int pos0 = static_cast<int>(std::floor(inputPosition));
+            int pos1 = std::min(pos0 + 1, numSamples - 1);
+            float frac = inputPosition - pos0;
+
+            resampled[i] = input[pos0] + frac * (input[pos1] - input[pos0]);
+        }
+    }
+
+
+    // process the input
+    for (int channel = 0; channel < numChannels; ++channel)
+    {
+        const float* input = resampledBuffer.getReadPointer(channel); // Use resampled data
         float* output = outputBuffer.getWritePointer(channel);
 
         // Stack the input signal into overlapping windows
         std::vector<std::vector<float>> stackedData;
-        stackOLA(input, numSamples, stackedData);
+        stackOLA(input, resampledNumSamples, stackedData);
 
         // Prepare buffers for LPC encoding
         std::vector<std::vector<float>> lpcCoefficients;

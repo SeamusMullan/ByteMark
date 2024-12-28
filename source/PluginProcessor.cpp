@@ -17,7 +17,7 @@ PluginProcessor::PluginProcessor()
                        ),
     apvts(*this, nullptr, "Parameters", createParameterLayout()),
     paramManager(apvts),
-    lpcProcessor(6, 1024)
+    lpcProcessor(6, 256)
 {
 }
 
@@ -195,6 +195,7 @@ void PluginProcessor::processBlock (juce::AudioBuffer<float>& inputBuffer,
 
     // Update LPCProcessor parameters
     lpcProcessor.setLpcOrder(static_cast<int>(apvts.getRawParameterValue ("LPC_ORDER")->load()));
+    lpcProcessor.setTargetSampleRate (apvts.getRawParameterValue ("LPC_SAMPLE_RATE")->load());
 
     // Apply LPC processing
     lpcProcessor.process(inputBuffer, processedBuffer);

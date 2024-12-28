@@ -82,6 +82,9 @@ public:
         params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{"OVERALL_MIX", 1}, "Overall Mix", 0.0f, 100.0f, 50.0f));
         params.push_back(std::make_unique<juce::AudioParameterBool>(juce::ParameterID{"BYPASS", 1}, "Bypass", false));
 
+
+
+        params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{"LPC_SAMPLE_RATE", 1}, "Sample Rate", 4000.0f, 48000.0f, 8000.0f));
         params.push_back(std::make_unique<juce::AudioParameterInt>(juce::ParameterID{"LPC_ORDER", 1}, "LPC Order", 1, 24, 10));
         params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{"LPC_ALPHA", 1}, "LPC Alpha", 0.01f, 1.0f, 0.95f));
         params.push_back(std::make_unique<juce::AudioParameterBool>(juce::ParameterID{"PITCH_DETECTION", 1}, "Enable Pitch Detection", false));

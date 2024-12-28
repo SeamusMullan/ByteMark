@@ -24,12 +24,14 @@ public:
     void setWindowSize(int newSize);
     void setPitchDetectionEnabled(bool enabled) { pitchDetectionEnabled = enabled; }
     void setSampleRate(double newSampleRate) { sampleRate = newSampleRate; }
+    void setTargetSampleRate(double newSampleRate) { targetSampleRate = newSampleRate; }
 
 private:
     int lpcOrder;                             // LPC order
     int windowSize;                           // Window size in samples
     bool pitchDetectionEnabled;               // Flag for enabling pitch detection
     double sampleRate = 44100.0;              // Default sample rate
+    double targetSampleRate = 8000.0;
 
     juce::dsp::WindowingFunction<float> window; // Windowing function for OLA
 
