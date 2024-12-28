@@ -7,12 +7,16 @@
 ReferenceTabComponent::ReferenceTabComponent(PluginProcessor& p)
     : processorRef(p),
 
-      mix ("Mix"),
-      mixAttachment(processorRef.apvts, "REFERENCE_MIX", mix.slider)
+      lpcOrder ("LPC Order"),
+      lpcOrderAttachment(processorRef.apvts, "LPC_ORDER", lpcOrder.slider),
+
+      lpcAlpha ("LPC Alpha"),
+      lpcAlphaAttachment(processorRef.apvts, "LPC_ALPHA", lpcAlpha.slider)
 
 
 {
-    addAndMakeVisible(mix);
+    addAndMakeVisible(lpcOrder);
+    addAndMakeVisible(lpcAlpha);
 }
 
 ReferenceTabComponent::~ReferenceTabComponent()
@@ -30,7 +34,8 @@ void ReferenceTabComponent::resized()
 
     juce::FlexBox flexBox;
     flexBox.flexDirection = juce::FlexBox::Direction::row;
-    flexBox.items.add(juce::FlexItem(mix).withFlex(1).withMargin(5));
+    flexBox.items.add(juce::FlexItem(lpcOrder).withFlex(1).withMargin(5));
+    flexBox.items.add(juce::FlexItem(lpcAlpha).withFlex(1).withMargin(5));
 
     flexBox.performLayout(area);
 }

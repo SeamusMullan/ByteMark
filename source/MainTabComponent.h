@@ -30,7 +30,7 @@ private:
 
 
 
-    juce::TextButton optionsButton { u8"⚙", "Options" };
+    juce::TextButton optionsButton { "O", "Options" };
 
     // UI Components
     SliderWithLabel inputGain;

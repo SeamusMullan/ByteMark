@@ -29,12 +29,14 @@ private:
     PluginProcessor& processorRef;
 
     // UI Components
-    SliderWithLabel mix;
+    SliderWithLabel lpcOrder;
+    SliderWithLabel lpcAlpha;
 
     // Attachments
     using Attachment = juce::AudioProcessorValueTreeState::SliderAttachment;
 
-    Attachment mixAttachment;
+    Attachment lpcOrderAttachment;
+    Attachment lpcAlphaAttachment;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ReferenceTabComponent)
 };

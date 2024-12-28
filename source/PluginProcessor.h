@@ -1,9 +1,11 @@
 #pragma once
 
+#include "LPCProcessor.h"
+
+#include "ParameterManager.h"
+#include <atomic>
 #include <juce_audio_processors/juce_audio_processors.h>
 #include <juce_dsp/juce_dsp.h>
-#include <atomic>
-#include "ParameterManager.h"
 
 #if (MSVC)
 #include "ipps.h"
@@ -90,6 +92,8 @@ public:
     }
 
 private:
+
+    LPCProcessor lpcProcessor;
 
     ParameterManager paramManager;
 

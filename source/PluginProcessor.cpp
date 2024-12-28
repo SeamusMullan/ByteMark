@@ -1,6 +1,6 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
-
+#include "LPCProcessor.h"
 
 //==============================================================================
 PluginProcessor::PluginProcessor()
@@ -13,7 +13,8 @@ PluginProcessor::PluginProcessor()
                      #endif
                        ),
     apvts(*this, nullptr, "Parameters", createParameterLayout()),
-    paramManager(apvts)
+    paramManager(apvts),
+    lpcProcessor(6, 2048)
 {
 }
 
@@ -91,6 +92,7 @@ void PluginProcessor::changeProgramName (int index, const juce::String& newName)
 void PluginProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
     // Initialize LPC effect with current parameters
+    lpcProcessor.setWindowSize(samplesPerBlock);
 }
 
 void PluginProcessor::releaseResources()
@@ -167,18 +169,12 @@ void PluginProcessor::processBlock (juce::AudioBuffer<float>& buffer,
     // Ignore MIDI messages if not used
     juce::ignoreUnused(midiMessages);
 
-    // If no audio, return early
-    if (buffer.getNumChannels() == 0)
-        return;
 
     // Update parameters
     paramManager.updateParameters();
-
     // Check for bypass
     if (paramManager.isBypassed())
     {
-        // Clear the buffer if bypassed
-        buffer.clear();
         return;
     }
 
@@ -187,18 +183,19 @@ void PluginProcessor::processBlock (juce::AudioBuffer<float>& buffer,
 
     // Apply input gain
     float inputGain = juce::Decibels::decibelsToGain(paramManager.getInGain());
-    processedBuffer.applyGain(inputGain);
+    buffer.applyGain(inputGain);
 
-    // Update LPC parameters and apply effect
+    // Update LPCProcessor parameters
+    lpcProcessor.setLpcOrder(apvts.getRawParameterValue("LPC_ORDER")->load());
 
-    // Apply output gain
+    // Apply LPC processing
+    lpcProcessor.process(buffer, processedBuffer);
+
     float outputGain = juce::Decibels::decibelsToGain(paramManager.getOutGain());
     processedBuffer.applyGain(outputGain);
 
-    // Copy processed buffer back to original
+    // copy to original, send to visualizer
     buffer.makeCopyOf(processedBuffer);
-
-    // Push to FIFO for visualization
     fifoQueue.push(buffer);
 }
 
