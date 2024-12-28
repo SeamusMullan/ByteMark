@@ -91,11 +91,6 @@ void PluginProcessor::changeProgramName (int index, const juce::String& newName)
 void PluginProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
     // Initialize LPC effect with current parameters
-    lpcEffect.prepareToPlay(sampleRate, samplesPerBlock);
-
-    // Optional: Set initial parameters
-    lpcEffect.setMaxOrder(static_cast<int>(apvts.getRawParameterValue("LPC_ORDER")->load()));
-    lpcEffect.setPreEmphasisAlpha(apvts.getRawParameterValue("LPC_ALPHA")->load());
 }
 
 void PluginProcessor::releaseResources()
@@ -194,12 +189,7 @@ void PluginProcessor::processBlock (juce::AudioBuffer<float>& buffer,
     float inputGain = juce::Decibels::decibelsToGain(paramManager.getInGain());
     processedBuffer.applyGain(inputGain);
 
-    // Update LPC parameters
-    lpcEffect.setMaxOrder(static_cast<int>(apvts.getRawParameterValue("LPC_ORDER")->load()));
-    lpcEffect.setPreEmphasisAlpha(apvts.getRawParameterValue("LPC_ALPHA")->load());
-
-    // Process the buffer
-    lpcEffect.process(buffer);
+    // Update LPC parameters and apply effect
 
     // Apply output gain
     float outputGain = juce::Decibels::decibelsToGain(paramManager.getOutGain());

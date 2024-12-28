@@ -4,7 +4,6 @@
 #include <juce_dsp/juce_dsp.h>
 #include <atomic>
 #include "ParameterManager.h"
-#include "LPCProcessor.h"
 
 #if (MSVC)
 #include "ipps.h"
@@ -91,8 +90,6 @@ public:
     }
 
 private:
-
-    LPCProcessor lpcEffect = LPCProcessor(16, 0.95f);
 
     ParameterManager paramManager;
 
