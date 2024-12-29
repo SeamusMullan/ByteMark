@@ -296,7 +296,7 @@ void LPCProcessor::performFFT(const std::vector<float>& input, std::vector<float
 void LPCProcessor::stackOLA(const float* input, size_t numSamples, std::vector<std::vector<float>>& stackedOutput)
 {
     int step = windowSize / 2;
-    int numWindows = (numSamples - windowSize) / step + 1;
+    int numWindows = (static_cast<int>(numSamples) - windowSize) / step + 1;
 
     for (int i = 0; i < numWindows; ++i)
     {

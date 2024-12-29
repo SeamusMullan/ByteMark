@@ -42,11 +42,14 @@ void ParameterManager::updateParameters()
     // Global parameters
     inGain = apvts.getRawParameterValue("IN")->load();
     outGain = apvts.getRawParameterValue("OUT")->load();
+    mix = apvts.getRawParameterValue ("OVERALL_MIX")->load();
     bypass = apvts.getRawParameterValue("BYPASS")->load() > 0.5f;
     visSmooth = apvts.getRawParameterValue("VIS_SMOOTH")->load();
+
     lpcOrder = apvts.getRawParameterValue ("LPC_ORDER")->load();
     lpcAlpha = apvts.getRawParameterValue ("LPC_ALPHA")->load();
     pitchDetection = apvts.getRawParameterValue ("PITCH_DETECTION")->load();
+    lpcSampleRate = apvts.getRawParameterValue ("LPC_SAMPLE_RATE")->load();
 
 }
 

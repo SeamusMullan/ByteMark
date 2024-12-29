@@ -11,12 +11,20 @@ ReferenceTabComponent::ReferenceTabComponent(PluginProcessor& p)
       lpcOrderAttachment(processorRef.apvts, "LPC_ORDER", lpcOrder.slider),
 
       lpcAlpha ("LPC Alpha"),
-      lpcAlphaAttachment(processorRef.apvts, "LPC_ALPHA", lpcAlpha.slider)
+      lpcAlphaAttachment(processorRef.apvts, "LPC_ALPHA", lpcAlpha.slider),
+
+      lpcSampleRate ("LPC Sample Rate"),
+      lpcSampleRateAttachment (processorRef.apvts, "LPC_SAMPLE_RATE", lpcSampleRate.slider),
+
+      lpcPitchEnabledButton("LPC Pitch Detection"),
+      lpcPitchEnabledButtonAttachment (processorRef.apvts, "PITCH_DETECTION", lpcPitchEnabledButton)
 
 
 {
     addAndMakeVisible(lpcOrder);
     addAndMakeVisible(lpcAlpha);
+    addAndMakeVisible (lpcSampleRate);
+    addAndMakeVisible (lpcPitchEnabledButton);
 }
 
 ReferenceTabComponent::~ReferenceTabComponent()
@@ -36,6 +44,8 @@ void ReferenceTabComponent::resized()
     flexBox.flexDirection = juce::FlexBox::Direction::row;
     flexBox.items.add(juce::FlexItem(lpcOrder).withFlex(1).withMargin(5));
     flexBox.items.add(juce::FlexItem(lpcAlpha).withFlex(1).withMargin(5));
+    flexBox.items.add(juce::FlexItem(lpcSampleRate).withFlex(1).withMargin(5));
+    flexBox.items.add(juce::FlexItem(lpcPitchEnabledButton).withFlex(1).withMargin(5));
 
     flexBox.performLayout(area);
 }

@@ -36,6 +36,17 @@ public:
     float getVisSmooth() const { return visSmooth; }
     bool getPitchDetection() const { return pitchDetection; }
 
+    // Parameters
+    float inGain = 0.0f;
+    float outGain = 0.0f;
+    bool bypass = false;
+    float visSmooth = 0.69f;
+    int lpcOrder = 10;
+    float lpcAlpha = 0.5f;
+    bool pitchDetection = false;
+    float lpcSampleRate = 44100.0f;
+    float mix = 1.0f;
+
 private:
     juce::AudioProcessorValueTreeState& apvts;
 
@@ -46,14 +57,7 @@ private:
     void mapParametersToEffects();
 
 
-    // Parameters
-    float inGain = 0.0f;
-    float outGain = 0.0f;
-    bool bypass = false;
-    float visSmooth = 0.69f;
-    int lpcOrder = 10;
-    float lpcAlpha = 0.5f;
-    bool pitchDetection = false;
+
 };
 
 

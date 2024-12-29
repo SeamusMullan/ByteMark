@@ -31,12 +31,21 @@ private:
     // UI Components
     SliderWithLabel lpcOrder;
     SliderWithLabel lpcAlpha;
+    SliderWithLabel lpcSampleRate;
+
+    juce::ToggleButton lpcPitchEnabledButton;
 
     // Attachments
     using Attachment = juce::AudioProcessorValueTreeState::SliderAttachment;
 
     Attachment lpcOrderAttachment;
     Attachment lpcAlphaAttachment;
+    Attachment lpcSampleRateAttachment;
+
+    using Button = juce::AudioProcessorValueTreeState::ButtonAttachment;
+
+    Button lpcPitchEnabledButtonAttachment;
+
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ReferenceTabComponent)
 };

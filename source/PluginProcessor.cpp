@@ -194,8 +194,8 @@ void PluginProcessor::processBlock (juce::AudioBuffer<float>& inputBuffer,
     inputBuffer.applyGain(inputGain);
 
     // Update LPCProcessor parameters
-    lpcProcessor.setLpcOrder(static_cast<int>(apvts.getRawParameterValue ("LPC_ORDER")->load()));
-    lpcProcessor.setTargetSampleRate (apvts.getRawParameterValue ("LPC_SAMPLE_RATE")->load());
+    lpcProcessor.setLpcOrder(paramManager.lpcOrder);
+    lpcProcessor.setTargetSampleRate (paramManager.lpcSampleRate);
 
     // Apply LPC processing
     lpcProcessor.process(inputBuffer, processedBuffer);
