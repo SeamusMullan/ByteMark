@@ -8,23 +8,20 @@ bool debugAudioProtection = false;
 //==============================================================================
 PluginProcessor::PluginProcessor()
      : AudioProcessor (BusesProperties()
-                     #if ! JucePlugin_IsMidiEffect
-                      #if ! JucePlugin_IsSynth
-                       .withInput  ("Input",  juce::AudioChannelSet::stereo(), true)
-                      #endif
-                       .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
-                     #endif
-                       ),
-    apvts(*this, nullptr, "Parameters", createParameterLayout()),
-    paramManager(apvts),
-    lpcProcessor(6, 256)
+            #if !JucePlugin_IsMidiEffect
+                #if !JucePlugin_IsSynth
+                                      .withInput ("Input", juce::AudioChannelSet::stereo(), true)
+                #endif
+                                      .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
+            #endif
+              ),
+    apvts (*this, nullptr, "Parameters", createParameterLayout()),
+    lpcProcessor (6, 1024),
+    paramManager (apvts)
 {
 }
 
-PluginProcessor::~PluginProcessor()
-{
-    // destroy anything created ig
-}
+PluginProcessor::~PluginProcessor() = default;
 
 //==============================================================================
 const juce::String PluginProcessor::getName() const
@@ -249,6 +246,50 @@ void PluginProcessor::setStateInformation (const void* data, int sizeInBytes)
     // whose contents will have been created by the getStateInformation() call.
     juce::ignoreUnused (data, sizeInBytes);
 }
+
+
+/*
+     Resamples an audio buffer to a target sample rate using linear interpolation
+
+     juce::AudioBuffer<float> inputBuffer -> The input audio buffer
+     int targetSampleRate -> the target sample rate in samples (e.g. 44_100 represents 44.1kHz)
+     returns -> juce::AudioBuffer<float> resampledBuffer (which is at the target sample rate)
+*/
+juce::AudioBuffer<float> PluginProcessor::resampleBuffer (const juce::AudioBuffer<float>& inputBuffer, const int targetSampleRate)
+{
+    const int numSamples = inputBuffer.getNumSamples();
+    const int numChannels = inputBuffer.getNumChannels();
+    const double resamplingFactor = static_cast<double> (numSamples) / targetSampleRate;
+
+    // represents the expected number of samples for the new buffer, since lower samples rates have fewer samples in the same amount of time
+    // think: hertz (Hz) -> samples / second, we cant change the length of audio so we change how densely the samples are spread
+
+    const int resampledNumSamples = static_cast<int> (numSamples * resamplingFactor);
+    juce::AudioBuffer<float> resampledBuffer (numChannels, resampledNumSamples);
+
+    // main loop
+    for (int channel = 0; channel < numChannels; ++channel)
+    {
+        const float* input = inputBuffer.getReadPointer (channel);
+        float* resampled = resampledBuffer.getWritePointer (channel);
+
+        // Resampling using linear interpolation
+        for (int i = 0; i < resampledNumSamples; ++i)
+        {
+            const float inputPosition = static_cast<double>(i) / resamplingFactor;
+            const int pos0 = static_cast<int> (std::floor (inputPosition));
+            const int pos1 = std::min (pos0 + 1, numSamples - 1);
+            const float frac = inputPosition - static_cast<float>(pos0);
+
+            resampled[i] = input[pos0] + frac * (input[pos1] - input[pos0]);
+        }
+    }
+    return resampledBuffer;
+}
+
+
+
+
 
 //==============================================================================
 // This creates new instances of the plugin..

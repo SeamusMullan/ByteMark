@@ -1,9 +1,7 @@
 #pragma once
 
 #include "LPCProcessor.h"
-
 #include "ParameterManager.h"
-#include <atomic>
 #include <juce_audio_processors/juce_audio_processors.h>
 #include <juce_dsp/juce_dsp.h>
 
@@ -57,6 +55,8 @@ public:
 
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
+
+    static juce::AudioBuffer<float> resampleBuffer(const juce::AudioBuffer<float>& inputBuffer, int targetSampleRate);
 
     juce::AudioProcessorValueTreeState apvts;
 
