@@ -70,7 +70,7 @@ void LPCProcessor::encodeLPC(const std::vector<std::vector<float>>& stackedData,
         // Perform pitch detection if enabled
         if (pitchDetectionEnabled)
         {
-            const float pitchFreq = static_cast<float>(detectPitch(segment));
+            auto pitchFreq = static_cast<float>(detectPitch(segment));
             pitchFrequencies.push_back(pitchFreq);
         }
         else
