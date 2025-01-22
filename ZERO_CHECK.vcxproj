@@ -1,0 +1,231 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ResolveNugetPackages>false</ResolveNugetPackages>
+  </PropertyGroup>
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="MinSizeRel|x64">
+      <Configuration>MinSizeRel</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="RelWithDebInfo|x64">
+      <Configuration>RelWithDebInfo</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{1C901AF7-FD18-3C40-99FA-0CEBEFD47BB1}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>
+    <WindowsTargetPlatformVersion>10.0.26100.0</WindowsTargetPlatformVersion>
+    <Platform>x64</Platform>
+    <ProjectName>ZERO_CHECK</ProjectName>
+    <VCProjectUpgraderObjectName>NoUpgrade</VCProjectUpgraderObjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Midl>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <PreBuildEvent>
+      <UseUtf8Encoding>Always</UseUtf8Encoding>
+      <Message>Checking File Globs</Message>
+      <Command>setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -P E:/Github_Clones/ByteMark/CMakeFiles/VerifyGlobs.cmake
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Midl>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <PreBuildEvent>
+      <UseUtf8Encoding>Always</UseUtf8Encoding>
+      <Message>Checking File Globs</Message>
+      <Command>setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -P E:/Github_Clones/ByteMark/CMakeFiles/VerifyGlobs.cmake
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">
+    <Midl>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <PreBuildEvent>
+      <UseUtf8Encoding>Always</UseUtf8Encoding>
+      <Message>Checking File Globs</Message>
+      <Command>setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -P E:/Github_Clones/ByteMark/CMakeFiles/VerifyGlobs.cmake
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">
+    <Midl>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <PreBuildEvent>
+      <UseUtf8Encoding>Always</UseUtf8Encoding>
+      <Message>Checking File Globs</Message>
+      <Command>setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -P E:/Github_Clones/ByteMark/CMakeFiles/VerifyGlobs.cmake
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <CustomBuild Include="E:\Github_Clones\ByteMark\CMakeFiles\01ff0dd14b0a0309d7306e4c038ad7f9\generate.stamp.rule">
+      <UseUtf8Encoding>Always</UseUtf8Encoding>
+      <BuildInParallel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</BuildInParallel>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Checking Build System</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SE:/Github_Clones/ByteMark -BE:/Github_Clones/ByteMark --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file E:/Github_Clones/ByteMark/ByteMark.sln
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Program Files (x86)\Intel\oneAPI\ipp\2021.12\lib\cmake\ipp\IPPConfig.cmake;C:\Program Files (x86)\Intel\oneAPI\ipp\2021.12\lib\cmake\ipp\IPPConfigVersion.cmake;C:\Program Files (x86)\Intel\oneAPI\ipp\2021.12\lib\cmake\ipp\IPPPathLayout.cmake;C:\Program Files (x86)\Intel\oneAPI\ipp\2021.12\lib\cmake\ipp\IPPUtils.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\BasicConfigVersion-ExactVersion.cmake.in;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeCInformation.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeCXXInformation.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeCheckCompilerFlagCommonPatterns.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeDependentOption.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeFindDependencyMacro.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeInitializeConfigs.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakePackageConfigHelpers.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeRCInformation.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CheckCSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CheckCXXCompilerFlag.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CheckCXXSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CheckIncludeFile.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CheckLibraryExists.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Compiler\MSVC-C.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Compiler\MSVC.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\ExternalProject\shared_internal_commands.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\FetchContent.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\FetchContent\CMakeLists.cmake.in;C:\Program Files\CMake\share\cmake-3.30\Modules\FindGit.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\FindThreads.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\GNUInstallDirs.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Internal\CheckCompilerFlag.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Internal\CheckFlagCommonConfig.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Internal\CheckSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Platform\Windows-Initialize.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Platform\Windows-MSVC-C.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Platform\WindowsPaths.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\WriteBasicConfigVersionFile.cmake;E:\Github_Clones\ByteMark\CMakeFiles\3.30.3\CMakeCCompiler.cmake;E:\Github_Clones\ByteMark\CMakeFiles\3.30.3\CMakeCXXCompiler.cmake;E:\Github_Clones\ByteMark\CMakeFiles\3.30.3\CMakeRCCompiler.cmake;E:\Github_Clones\ByteMark\CMakeFiles\3.30.3\CMakeSystem.cmake;E:\Github_Clones\ByteMark\CMakeLists.txt;E:\Github_Clones\ByteMark\JUCE\CMakeLists.txt;E:\Github_Clones\ByteMark\JUCE\extras\Build\CMake\JUCECheckAtomic.cmake;E:\Github_Clones\ByteMark\JUCE\extras\Build\CMake\JUCEConfig.cmake.in;E:\Github_Clones\ByteMark\JUCE\extras\Build\CMake\JUCEHelperTargets.cmake;E:\Github_Clones\ByteMark\JUCE\extras\Build\CMake\JUCEModuleSupport.cmake;E:\Github_Clones\ByteMark\JUCE\extras\Build\CMake\JUCEUtils.cmake;E:\Github_Clones\ByteMark\JUCE\extras\Build\CMakeLists.txt;E:\Github_Clones\ByteMark\JUCE\extras\Build\juceaide\CMakeLists.txt;E:\Github_Clones\ByteMark\JUCE\modules\CMakeLists.txt;E:\Github_Clones\ByteMark\JUCE\tools\JUCEToolsExport.cmake;E:\Github_Clones\ByteMark\_deps\catch2-src\CMake\CatchConfigOptions.cmake;E:\Github_Clones\ByteMark\_deps\catch2-src\CMake\CatchMiscFunctions.cmake;E:\Github_Clones\ByteMark\_deps\catch2-src\CMakeLists.txt;E:\Github_Clones\ByteMark\_deps\catch2-src\extras\Catch.cmake;E:\Github_Clones\ByteMark\_deps\catch2-src\src\CMakeLists.txt;E:\Github_Clones\ByteMark\_deps\catch2-src\src\catch2\catch_user_config.hpp.in;E:\Github_Clones\ByteMark\cmake\Assets.cmake;E:\Github_Clones\ByteMark\cmake\Benchmarks.cmake;E:\Github_Clones\ByteMark\cmake\GitHubENV.cmake;E:\Github_Clones\ByteMark\cmake\JUCEDefaults.cmake;E:\Github_Clones\ByteMark\cmake\PamplejuceIPP.cmake;E:\Github_Clones\ByteMark\cmake\PamplejuceMacOS.cmake;E:\Github_Clones\ByteMark\cmake\PamplejuceVersion.cmake;E:\Github_Clones\ByteMark\cmake\SharedCodeDefaults.cmake;E:\Github_Clones\ByteMark\cmake\Tests.cmake;E:\Github_Clones\ByteMark\cmake\XcodePrettify.cmake;E:\Github_Clones\ByteMark\modules\melatonin_inspector\CMakeLists.txt;E:\Github_Clones\ByteMark\CMakeFiles\cmake.verify_globs;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">E:\Github_Clones\ByteMark\CMakeFiles\generate.stamp;E:\Github_Clones\ByteMark\JUCE\CMakeFiles\generate.stamp;E:\Github_Clones\ByteMark\JUCE\modules\CMakeFiles\generate.stamp;E:\Github_Clones\ByteMark\JUCE\extras\Build\CMakeFiles\generate.stamp;E:\Github_Clones\ByteMark\JUCE\extras\Build\juceaide\CMakeFiles\generate.stamp;E:\Github_Clones\ByteMark\modules\melatonin_inspector\CMakeFiles\generate.stamp;E:\Github_Clones\ByteMark\_deps\catch2-build\CMakeFiles\generate.stamp;E:\Github_Clones\ByteMark\_deps\catch2-build\src\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</LinkObjects>
+      <BuildInParallel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</BuildInParallel>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Checking Build System</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SE:/Github_Clones/ByteMark -BE:/Github_Clones/ByteMark --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file E:/Github_Clones/ByteMark/ByteMark.sln
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Program Files (x86)\Intel\oneAPI\ipp\2021.12\lib\cmake\ipp\IPPConfig.cmake;C:\Program Files (x86)\Intel\oneAPI\ipp\2021.12\lib\cmake\ipp\IPPConfigVersion.cmake;C:\Program Files (x86)\Intel\oneAPI\ipp\2021.12\lib\cmake\ipp\IPPPathLayout.cmake;C:\Program Files (x86)\Intel\oneAPI\ipp\2021.12\lib\cmake\ipp\IPPUtils.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\BasicConfigVersion-ExactVersion.cmake.in;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeCInformation.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeCXXInformation.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeCheckCompilerFlagCommonPatterns.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeDependentOption.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeFindDependencyMacro.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeInitializeConfigs.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakePackageConfigHelpers.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeRCInformation.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CheckCSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CheckCXXCompilerFlag.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CheckCXXSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CheckIncludeFile.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CheckLibraryExists.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Compiler\MSVC-C.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Compiler\MSVC.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\ExternalProject\shared_internal_commands.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\FetchContent.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\FetchContent\CMakeLists.cmake.in;C:\Program Files\CMake\share\cmake-3.30\Modules\FindGit.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\FindThreads.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\GNUInstallDirs.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Internal\CheckCompilerFlag.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Internal\CheckFlagCommonConfig.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Internal\CheckSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Platform\Windows-Initialize.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Platform\Windows-MSVC-C.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Platform\WindowsPaths.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\WriteBasicConfigVersionFile.cmake;E:\Github_Clones\ByteMark\CMakeFiles\3.30.3\CMakeCCompiler.cmake;E:\Github_Clones\ByteMark\CMakeFiles\3.30.3\CMakeCXXCompiler.cmake;E:\Github_Clones\ByteMark\CMakeFiles\3.30.3\CMakeRCCompiler.cmake;E:\Github_Clones\ByteMark\CMakeFiles\3.30.3\CMakeSystem.cmake;E:\Github_Clones\ByteMark\CMakeLists.txt;E:\Github_Clones\ByteMark\JUCE\CMakeLists.txt;E:\Github_Clones\ByteMark\JUCE\extras\Build\CMake\JUCECheckAtomic.cmake;E:\Github_Clones\ByteMark\JUCE\extras\Build\CMake\JUCEConfig.cmake.in;E:\Github_Clones\ByteMark\JUCE\extras\Build\CMake\JUCEHelperTargets.cmake;E:\Github_Clones\ByteMark\JUCE\extras\Build\CMake\JUCEModuleSupport.cmake;E:\Github_Clones\ByteMark\JUCE\extras\Build\CMake\JUCEUtils.cmake;E:\Github_Clones\ByteMark\JUCE\extras\Build\CMakeLists.txt;E:\Github_Clones\ByteMark\JUCE\extras\Build\juceaide\CMakeLists.txt;E:\Github_Clones\ByteMark\JUCE\modules\CMakeLists.txt;E:\Github_Clones\ByteMark\JUCE\tools\JUCEToolsExport.cmake;E:\Github_Clones\ByteMark\_deps\catch2-src\CMake\CatchConfigOptions.cmake;E:\Github_Clones\ByteMark\_deps\catch2-src\CMake\CatchMiscFunctions.cmake;E:\Github_Clones\ByteMark\_deps\catch2-src\CMakeLists.txt;E:\Github_Clones\ByteMark\_deps\catch2-src\extras\Catch.cmake;E:\Github_Clones\ByteMark\_deps\catch2-src\src\CMakeLists.txt;E:\Github_Clones\ByteMark\_deps\catch2-src\src\catch2\catch_user_config.hpp.in;E:\Github_Clones\ByteMark\cmake\Assets.cmake;E:\Github_Clones\ByteMark\cmake\Benchmarks.cmake;E:\Github_Clones\ByteMark\cmake\GitHubENV.cmake;E:\Github_Clones\ByteMark\cmake\JUCEDefaults.cmake;E:\Github_Clones\ByteMark\cmake\PamplejuceIPP.cmake;E:\Github_Clones\ByteMark\cmake\PamplejuceMacOS.cmake;E:\Github_Clones\ByteMark\cmake\PamplejuceVersion.cmake;E:\Github_Clones\ByteMark\cmake\SharedCodeDefaults.cmake;E:\Github_Clones\ByteMark\cmake\Tests.cmake;E:\Github_Clones\ByteMark\cmake\XcodePrettify.cmake;E:\Github_Clones\ByteMark\modules\melatonin_inspector\CMakeLists.txt;E:\Github_Clones\ByteMark\CMakeFiles\cmake.verify_globs;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">E:\Github_Clones\ByteMark\CMakeFiles\generate.stamp;E:\Github_Clones\ByteMark\JUCE\CMakeFiles\generate.stamp;E:\Github_Clones\ByteMark\JUCE\modules\CMakeFiles\generate.stamp;E:\Github_Clones\ByteMark\JUCE\extras\Build\CMakeFiles\generate.stamp;E:\Github_Clones\ByteMark\JUCE\extras\Build\juceaide\CMakeFiles\generate.stamp;E:\Github_Clones\ByteMark\modules\melatonin_inspector\CMakeFiles\generate.stamp;E:\Github_Clones\ByteMark\_deps\catch2-build\CMakeFiles\generate.stamp;E:\Github_Clones\ByteMark\_deps\catch2-build\src\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkObjects>
+      <BuildInParallel Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">true</BuildInParallel>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">Checking Build System</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SE:/Github_Clones/ByteMark -BE:/Github_Clones/ByteMark --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file E:/Github_Clones/ByteMark/ByteMark.sln
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Program Files (x86)\Intel\oneAPI\ipp\2021.12\lib\cmake\ipp\IPPConfig.cmake;C:\Program Files (x86)\Intel\oneAPI\ipp\2021.12\lib\cmake\ipp\IPPConfigVersion.cmake;C:\Program Files (x86)\Intel\oneAPI\ipp\2021.12\lib\cmake\ipp\IPPPathLayout.cmake;C:\Program Files (x86)\Intel\oneAPI\ipp\2021.12\lib\cmake\ipp\IPPUtils.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\BasicConfigVersion-ExactVersion.cmake.in;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeCInformation.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeCXXInformation.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeCheckCompilerFlagCommonPatterns.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeDependentOption.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeFindDependencyMacro.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeInitializeConfigs.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakePackageConfigHelpers.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeRCInformation.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CheckCSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CheckCXXCompilerFlag.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CheckCXXSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CheckIncludeFile.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CheckLibraryExists.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Compiler\MSVC-C.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Compiler\MSVC.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\ExternalProject\shared_internal_commands.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\FetchContent.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\FetchContent\CMakeLists.cmake.in;C:\Program Files\CMake\share\cmake-3.30\Modules\FindGit.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\FindThreads.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\GNUInstallDirs.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Internal\CheckCompilerFlag.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Internal\CheckFlagCommonConfig.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Internal\CheckSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Platform\Windows-Initialize.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Platform\Windows-MSVC-C.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Platform\WindowsPaths.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\WriteBasicConfigVersionFile.cmake;E:\Github_Clones\ByteMark\CMakeFiles\3.30.3\CMakeCCompiler.cmake;E:\Github_Clones\ByteMark\CMakeFiles\3.30.3\CMakeCXXCompiler.cmake;E:\Github_Clones\ByteMark\CMakeFiles\3.30.3\CMakeRCCompiler.cmake;E:\Github_Clones\ByteMark\CMakeFiles\3.30.3\CMakeSystem.cmake;E:\Github_Clones\ByteMark\CMakeLists.txt;E:\Github_Clones\ByteMark\JUCE\CMakeLists.txt;E:\Github_Clones\ByteMark\JUCE\extras\Build\CMake\JUCECheckAtomic.cmake;E:\Github_Clones\ByteMark\JUCE\extras\Build\CMake\JUCEConfig.cmake.in;E:\Github_Clones\ByteMark\JUCE\extras\Build\CMake\JUCEHelperTargets.cmake;E:\Github_Clones\ByteMark\JUCE\extras\Build\CMake\JUCEModuleSupport.cmake;E:\Github_Clones\ByteMark\JUCE\extras\Build\CMake\JUCEUtils.cmake;E:\Github_Clones\ByteMark\JUCE\extras\Build\CMakeLists.txt;E:\Github_Clones\ByteMark\JUCE\extras\Build\juceaide\CMakeLists.txt;E:\Github_Clones\ByteMark\JUCE\modules\CMakeLists.txt;E:\Github_Clones\ByteMark\JUCE\tools\JUCEToolsExport.cmake;E:\Github_Clones\ByteMark\_deps\catch2-src\CMake\CatchConfigOptions.cmake;E:\Github_Clones\ByteMark\_deps\catch2-src\CMake\CatchMiscFunctions.cmake;E:\Github_Clones\ByteMark\_deps\catch2-src\CMakeLists.txt;E:\Github_Clones\ByteMark\_deps\catch2-src\extras\Catch.cmake;E:\Github_Clones\ByteMark\_deps\catch2-src\src\CMakeLists.txt;E:\Github_Clones\ByteMark\_deps\catch2-src\src\catch2\catch_user_config.hpp.in;E:\Github_Clones\ByteMark\cmake\Assets.cmake;E:\Github_Clones\ByteMark\cmake\Benchmarks.cmake;E:\Github_Clones\ByteMark\cmake\GitHubENV.cmake;E:\Github_Clones\ByteMark\cmake\JUCEDefaults.cmake;E:\Github_Clones\ByteMark\cmake\PamplejuceIPP.cmake;E:\Github_Clones\ByteMark\cmake\PamplejuceMacOS.cmake;E:\Github_Clones\ByteMark\cmake\PamplejuceVersion.cmake;E:\Github_Clones\ByteMark\cmake\SharedCodeDefaults.cmake;E:\Github_Clones\ByteMark\cmake\Tests.cmake;E:\Github_Clones\ByteMark\cmake\XcodePrettify.cmake;E:\Github_Clones\ByteMark\modules\melatonin_inspector\CMakeLists.txt;E:\Github_Clones\ByteMark\CMakeFiles\cmake.verify_globs;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">E:\Github_Clones\ByteMark\CMakeFiles\generate.stamp;E:\Github_Clones\ByteMark\JUCE\CMakeFiles\generate.stamp;E:\Github_Clones\ByteMark\JUCE\modules\CMakeFiles\generate.stamp;E:\Github_Clones\ByteMark\JUCE\extras\Build\CMakeFiles\generate.stamp;E:\Github_Clones\ByteMark\JUCE\extras\Build\juceaide\CMakeFiles\generate.stamp;E:\Github_Clones\ByteMark\modules\melatonin_inspector\CMakeFiles\generate.stamp;E:\Github_Clones\ByteMark\_deps\catch2-build\CMakeFiles\generate.stamp;E:\Github_Clones\ByteMark\_deps\catch2-build\src\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</LinkObjects>
+      <BuildInParallel Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">true</BuildInParallel>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">Checking Build System</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SE:/Github_Clones/ByteMark -BE:/Github_Clones/ByteMark --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file E:/Github_Clones/ByteMark/ByteMark.sln
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Program Files (x86)\Intel\oneAPI\ipp\2021.12\lib\cmake\ipp\IPPConfig.cmake;C:\Program Files (x86)\Intel\oneAPI\ipp\2021.12\lib\cmake\ipp\IPPConfigVersion.cmake;C:\Program Files (x86)\Intel\oneAPI\ipp\2021.12\lib\cmake\ipp\IPPPathLayout.cmake;C:\Program Files (x86)\Intel\oneAPI\ipp\2021.12\lib\cmake\ipp\IPPUtils.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\BasicConfigVersion-ExactVersion.cmake.in;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeCInformation.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeCXXInformation.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeCheckCompilerFlagCommonPatterns.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeDependentOption.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeFindDependencyMacro.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeInitializeConfigs.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakePackageConfigHelpers.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeRCInformation.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CheckCSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CheckCXXCompilerFlag.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CheckCXXSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CheckIncludeFile.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CheckLibraryExists.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Compiler\MSVC-C.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Compiler\MSVC.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\ExternalProject\shared_internal_commands.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\FetchContent.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\FetchContent\CMakeLists.cmake.in;C:\Program Files\CMake\share\cmake-3.30\Modules\FindGit.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\FindThreads.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\GNUInstallDirs.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Internal\CheckCompilerFlag.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Internal\CheckFlagCommonConfig.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Internal\CheckSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Platform\Windows-Initialize.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Platform\Windows-MSVC-C.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Platform\WindowsPaths.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\WriteBasicConfigVersionFile.cmake;E:\Github_Clones\ByteMark\CMakeFiles\3.30.3\CMakeCCompiler.cmake;E:\Github_Clones\ByteMark\CMakeFiles\3.30.3\CMakeCXXCompiler.cmake;E:\Github_Clones\ByteMark\CMakeFiles\3.30.3\CMakeRCCompiler.cmake;E:\Github_Clones\ByteMark\CMakeFiles\3.30.3\CMakeSystem.cmake;E:\Github_Clones\ByteMark\CMakeLists.txt;E:\Github_Clones\ByteMark\JUCE\CMakeLists.txt;E:\Github_Clones\ByteMark\JUCE\extras\Build\CMake\JUCECheckAtomic.cmake;E:\Github_Clones\ByteMark\JUCE\extras\Build\CMake\JUCEConfig.cmake.in;E:\Github_Clones\ByteMark\JUCE\extras\Build\CMake\JUCEHelperTargets.cmake;E:\Github_Clones\ByteMark\JUCE\extras\Build\CMake\JUCEModuleSupport.cmake;E:\Github_Clones\ByteMark\JUCE\extras\Build\CMake\JUCEUtils.cmake;E:\Github_Clones\ByteMark\JUCE\extras\Build\CMakeLists.txt;E:\Github_Clones\ByteMark\JUCE\extras\Build\juceaide\CMakeLists.txt;E:\Github_Clones\ByteMark\JUCE\modules\CMakeLists.txt;E:\Github_Clones\ByteMark\JUCE\tools\JUCEToolsExport.cmake;E:\Github_Clones\ByteMark\_deps\catch2-src\CMake\CatchConfigOptions.cmake;E:\Github_Clones\ByteMark\_deps\catch2-src\CMake\CatchMiscFunctions.cmake;E:\Github_Clones\ByteMark\_deps\catch2-src\CMakeLists.txt;E:\Github_Clones\ByteMark\_deps\catch2-src\extras\Catch.cmake;E:\Github_Clones\ByteMark\_deps\catch2-src\src\CMakeLists.txt;E:\Github_Clones\ByteMark\_deps\catch2-src\src\catch2\catch_user_config.hpp.in;E:\Github_Clones\ByteMark\cmake\Assets.cmake;E:\Github_Clones\ByteMark\cmake\Benchmarks.cmake;E:\Github_Clones\ByteMark\cmake\GitHubENV.cmake;E:\Github_Clones\ByteMark\cmake\JUCEDefaults.cmake;E:\Github_Clones\ByteMark\cmake\PamplejuceIPP.cmake;E:\Github_Clones\ByteMark\cmake\PamplejuceMacOS.cmake;E:\Github_Clones\ByteMark\cmake\PamplejuceVersion.cmake;E:\Github_Clones\ByteMark\cmake\SharedCodeDefaults.cmake;E:\Github_Clones\ByteMark\cmake\Tests.cmake;E:\Github_Clones\ByteMark\cmake\XcodePrettify.cmake;E:\Github_Clones\ByteMark\modules\melatonin_inspector\CMakeLists.txt;E:\Github_Clones\ByteMark\CMakeFiles\cmake.verify_globs;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">E:\Github_Clones\ByteMark\CMakeFiles\generate.stamp;E:\Github_Clones\ByteMark\JUCE\CMakeFiles\generate.stamp;E:\Github_Clones\ByteMark\JUCE\modules\CMakeFiles\generate.stamp;E:\Github_Clones\ByteMark\JUCE\extras\Build\CMakeFiles\generate.stamp;E:\Github_Clones\ByteMark\JUCE\extras\Build\juceaide\CMakeFiles\generate.stamp;E:\Github_Clones\ByteMark\modules\melatonin_inspector\CMakeFiles\generate.stamp;E:\Github_Clones\ByteMark\_deps\catch2-build\CMakeFiles\generate.stamp;E:\Github_Clones\ByteMark\_deps\catch2-build\src\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">false</LinkObjects>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

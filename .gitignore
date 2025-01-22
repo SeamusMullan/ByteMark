@@ -28,3 +28,23 @@ cmake-build-debug
 cmake-build-release
 cmake-build-relwithdebinfo
 packaging/Output/*
+/.vs
+/Assets.dir
+/Benchmarks.dir
+/ByteMark.dir
+/ByteMark_artefacts
+/ByteMark_rc_lib.dir
+/ByteMark_Standalone.dir
+/ByteMark_VST3.dir
+/DawnCache
+/GPUCache
+/Debug
+/Intel® VTune™ Profiler Results
+/juce_binarydata_Assets
+/juce_vst3_helper.dir
+/Tests.dir
+/x64
+debug.log
+*.filters
+*.user
+*.lib

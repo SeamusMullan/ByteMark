@@ -16,7 +16,7 @@ PluginProcessor::PluginProcessor()
             #endif
               ),
     apvts (*this, nullptr, "Parameters", createParameterLayout()),
-    lpcProcessor (6, 1024),
+    lpcProcessor (16, 512),
     paramManager (apvts)
 {
 }
@@ -93,6 +93,7 @@ void PluginProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
     // Initialize LPC effect with current parameters
     lpcProcessor.setWindowSize(samplesPerBlock/2);
+    lpcProcessor.setTargetSampleRate (sampleRate);
 }
 
 void PluginProcessor::releaseResources()
@@ -207,14 +208,14 @@ void PluginProcessor::processBlock (juce::AudioBuffer<float>& inputBuffer,
     protectYourEars(inputBuffer.getWritePointer(0), inputBuffer.getNumSamples());
     protectYourEars(inputBuffer.getWritePointer(1), inputBuffer.getNumSamples());
 
-    // #ifdef JUCE_DEBUG
-    // if (debugAudioProtection)
-    // {
-    //     protectYourEars(inputBuffer.getWritePointer(0), inputBuffer.getNumSamples());
-    //     protectYourEars(inputBuffer.getWritePointer(1), inputBuffer.getNumSamples());
-    // }
-    //
-    // #endif
+     #ifdef JUCE_DEBUG
+     if (debugAudioProtection)
+     {
+         protectYourEars(inputBuffer.getWritePointer(0), inputBuffer.getNumSamples());
+         protectYourEars(inputBuffer.getWritePointer(1), inputBuffer.getNumSamples());
+     }
+    
+     #endif
 }
 
 

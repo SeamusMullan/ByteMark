@@ -1,62 +1,118 @@
-//
-// Created by seamu on 28/12/2024.
-//
-
-#ifndef LPCPROCESSOR_H
-#define LPCPROCESSOR_H
-
-
 #pragma once
 
 #include <juce_audio_basics/juce_audio_basics.h>
 #include <juce_dsp/juce_dsp.h>
+
+#include <memory>
+#include <random>
 #include <vector>
 
+/**
+    A simplified LPC-based audio processor:
+    - Overlap-add framing
+    - Compute LPC via autocorrelation + Levinson-Durbin
+    - Optional naive pitch detection
+    - Synthesize frames with impulse train or noise
+*/
 class LPCProcessor
 {
 public:
-    LPCProcessor(int lpcOrder, int windowSize);
+    LPCProcessor (int lpcOrder, int windowSize);
     ~LPCProcessor();
 
-    void process(const juce::AudioBuffer<float>& inputBuffer, juce::AudioBuffer<float>& outputBuffer) const;
-
-    void setLpcOrder(const int newOrder) { lpcOrder = newOrder; }
+    //==========================================================================
+    /** Adjusts the analysis/synthesis window size. */
     void setWindowSize (int newSize);
-    void setPitchDetectionEnabled(const bool enabled) { pitchDetectionEnabled = enabled; }
-    void setSampleRate(const double newSampleRate) { sampleRate = newSampleRate; }
-    void setTargetSampleRate(const double newSampleRate) { targetSampleRate = newSampleRate; }
+
+    /** Adjusts the number of LPC coefficients (model order). */
+    void setLpcOrder (int newOrder);
+
+    /** Enables or disables pitch detection (voiced/unvoiced). */
+    void setPitchDetectionEnabled (bool shouldEnable) { pitchDetectionEnabled = shouldEnable; }
+
+    /** Sets the sample rate used for pitch detection & period calculations. */
+    void setTargetSampleRate (double newRate) { sampleRate = newRate; }
+
+    //==========================================================================
+    /** Main processing function: 
+        1) Overlap-add frames from input
+        2) Compute LPC & pitch
+        3) Re-synthesize
+        4) Overlap-add to output
+    */
+    void process (const juce::AudioBuffer<float>& inputBuffer,
+        juce::AudioBuffer<float>& outputBuffer);
 
 private:
-    int lpcOrder;                             // LPC order
-    int windowSize;                           // Window size in samples
-    bool pitchDetectionEnabled;               // Flag for enabling pitch detection
-    double sampleRate = 44100.0;              // Default sample rate
-    double targetSampleRate = 8000.0;
+    //==========================================================================
+    // Internal helpers:
 
-    juce::dsp::WindowingFunction<float> window; // Windowing function for OLA
+    /** Break input into overlapping windowed segments. */
+    void stackOLA (const float* input, size_t numSamples);
 
-    // Helper functions
-    void stackOLA(const float* input, size_t numSamples, std::vector<std::vector<float>>& stackedOutput) const;
-    void pressStack(const std::vector<std::vector<float>>& stackedInput, float* output, int outputSize) const;
+    /** Overlap-add synthesized frames into output. */
+    void pressStack (float* output, int outputSize);
 
-    void encodeLPC(const std::vector<std::vector<float>>& stackedData,
-                   std::vector<std::vector<float>>& lpcCoefficients,
-                   std::vector<float>& signalPower,
-                   std::vector<float>& pitchFrequencies) const;
+    /** For each stacked frame, compute LPC + power (+ pitch if enabled). */
+    void encodeLPC();
 
-    void decodeLPC (const std::vector<std::vector<float>>& lpcCoefficients,
-        const std::vector<float>& signalPower,
-        const std::vector<float>& pitchFrequencies,
-        size_t numSegments,
-        std::vector<std::vector<float>>& synthesizedData) const;
-    static void computeAutocorrelation (const float* input, int numSamples, int order, std::vector<float>& autocorrelation);
+    /** For each frame, create an excitation signal & AR-filter it to get final audio. */
+    void decodeLPC();
 
-    static static void computeLpc(const float* input, size_t numSamples, int order,
-                    std::vector<float>& coefficients, float& power);
+    /** Autocorrelation -> reflection coefficients -> LPC (Levinson-Durbin). */
+    void computeLpc (const float* windowedData, size_t length, std::vector<float>& lpcOut, float& powerOut);
 
-    double detectPitch (const std::vector<float>& segment) const;
+    /** Compute the autocorrelation using an FFT-based method (faster for big windowSize). */
+    void computeAutocorrelation (const float* data, int length, int order, float* dest);
 
-    static void performFFT(const std::vector<float>& input, std::vector<float>& magnitudes);
+    /** Naive pitch detection: largest bin in an FFT. */
+    double detectPitch (const float* windowedData, size_t length);
+
+    /** Forward FFT, return magnitudes of the half-spectrum. */
+    void performFFT (const float* input, size_t length, std::vector<float>& magnitudes);
+
+    /** Update internal buffers based on new windowSize or lpcOrder. */
+    void updateInternalBuffers();
+
+    /** Reallocate the FFT object/buffer if needed. */
+    void updateFFTObject();
+
+    /** (Optional) Regenerate Hann window. */
+    void updateWindowFunction();
+
+    //==========================================================================
+    // Internal state:
+
+    int lpcOrder = 0; ///< number of LPC coefficients (model order).
+    int windowSize = 0; ///< size of analysis/synthesis window.
+    int hopSize = 0; ///< overlap step size (windowSize / 2, for 50% overlap).
+    double sampleRate = 44100.0; ///< sample rate for pitch detection.
+
+    bool pitchDetectionEnabled = false;
+
+    // Preallocated data for one process call:
+    // Stacked, windowed input frames:
+    std::vector<std::vector<float>> stackedData;
+    // LPC coefficients for each frame:
+    std::vector<std::vector<float>> lpcCoefficients;
+    // Power per frame (for amplitude/gain):
+    std::vector<float> signalPowers;
+    // Pitch frequencies (Hz) per frame:
+    std::vector<float> pitchFrequencies;
+    // Synthesized frames:
+    std::vector<std::vector<float>> synthesizedData;
+
+    // Hann window coefficients:
+    std::vector<float> hannWindow;
+
+    // For FFT-based autocorrelation & pitch detection:
+    std::unique_ptr<juce::dsp::FFT> fft;
+    int fftSize = 0; // actual size used by juce::dsp::FFT
+    std::vector<float> fftBuffer;
+
+    // RNG for unvoiced frames:
+    std::mt19937 rng { 0xDEADBEEF };
+    std::uniform_real_distribution<float> dist { -1.0f, 1.0f };
+
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (LPCProcessor)
 };
-
-#endif //LPCPROCESSOR_H

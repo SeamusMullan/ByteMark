@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2048 2048">
+  <defs>
+    <style>
+      .cls-1 {
+        letter-spacing: 0em;
+      }
+
+      .cls-2 {
+        fill: #3b6e96;
+      }
+
+      .cls-2, .cls-3 {
+        font-family: AmericanTypewriterLT-Bold, 'ITC American Typewriter LT';
+        font-size: 576px;
+        font-weight: 700;
+      }
+
+      .cls-3 {
+        fill: #ad3a24;
+      }
+    </style>
+  </defs>
+  <text class="cls-2" transform="translate(184.47 930.12)"><tspan x="0" y="0">Byte</tspan></text>
+  <text class="cls-3" transform="translate(217.91 1459.45)"><tspan x="0" y="0">Ma</tspan><tspan class="cls-1" x="956.15" y="0">r</tspan><tspan x="1249.91" y="0">k</tspan></text>
+</svg>
