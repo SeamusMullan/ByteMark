@@ -196,7 +196,7 @@ void PluginProcessor::processBlock (juce::AudioBuffer<float>& inputBuffer,
     lpcProcessor.setTargetSampleRate (paramManager.lpcSampleRate);
 
     // Apply LPC processing
-    lpcProcessor.process(inputBuffer, processedBuffer);
+    // lpcProcessor.process(inputBuffer, processedBuffer);
 
     float outputGain = juce::Decibels::decibelsToGain(paramManager.getOutGain());
     processedBuffer.applyGain(outputGain);

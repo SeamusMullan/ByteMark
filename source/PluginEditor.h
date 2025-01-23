@@ -24,9 +24,15 @@ private:
     // Reference to the processor
     PluginProcessor& processorRef;
 
+    // keep aspect ratio when resizing :)
+    juce::ComponentBoundsConstrainer constrainer;
+
     // Melatonin Inspector
     std::unique_ptr<melatonin::Inspector> inspector;
     juce::TextButton inspectButton { "Inspect" };
+
+    // UI BG image
+    juce::Image uiBackground;
 
     // Tabbed Component
     juce::TabbedComponent tabbedComponent { juce::TabbedButtonBar::TabsAtTop };

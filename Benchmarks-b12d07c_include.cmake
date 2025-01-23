@@ -1,5 +1,0 @@
-if(EXISTS "E:/Github_Clones/ByteMark/Benchmarks-b12d07c_tests.cmake")
-  include("E:/Github_Clones/ByteMark/Benchmarks-b12d07c_tests.cmake")
-else()
-  add_test(Benchmarks_NOT_BUILT-b12d07c Benchmarks_NOT_BUILT-b12d07c)
-endif()

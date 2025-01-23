@@ -14,8 +14,11 @@ PluginEditor::PluginEditor (PluginProcessor& p)
     tabbedComponent.addTab("Main", juce::Colours::darkgrey, &mainTab, false);
     tabbedComponent.addTab("Reference", juce::Colours::darkgrey, &referenceTab, false);
 
-    addAndMakeVisible(tabbedComponent);
-    addAndMakeVisible (spectrumAnalyzer);
+    uiBackground = juce::ImageCache::getFromMemory (BinaryData::main_ui_png,
+                                                       BinaryData::main_ui_pngSize);
+
+    // addAndMakeVisible(tabbedComponent);
+    // addAndMakeVisible (spectrumAnalyzer);
 
 
     // Melatonin Inspector Button
@@ -30,10 +33,18 @@ PluginEditor::PluginEditor (PluginProcessor& p)
         inspector->setVisible (true);
     };
 
+    // Force image aspect ratio
+    constrainer.setFixedAspectRatio (832.0f / 1000.0f);
+
+    // Now tell the editor to use this constrainer
+    setConstrainer (&constrainer);
+
     // Allow the editor to be resizable
     setResizable(true, true);
-    setResizeLimits(600, 400, 1920, 1080);
-    setSize (960, 540);
+    constrainer.setMinimumSize(416, 500);
+    constrainer.setMaximumSize(1664, 2000);
+
+    setSize (624, 750);
 }
 
 PluginEditor::~PluginEditor()
@@ -44,7 +55,11 @@ PluginEditor::~PluginEditor()
 void PluginEditor::paint (juce::Graphics& g)
 {
     // Fill background
-    g.fillAll (juce::Colours::black);
+    // g.fillAll (juce::Colours::black);
+    int width = getWidth();
+    int height = getHeight();
+    g.drawImage(uiBackground, 0, 0, width, height, 0, 0, 832, 1000, false);
+
     spectrumAnalyzer.setVisualizerSmoothingValue (processorRef.apvts.getRawParameterValue ("VIS_SMOOTH")->load());
 }
 
