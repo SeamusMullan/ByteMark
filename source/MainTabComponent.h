@@ -9,7 +9,7 @@
 #include <juce_graphics/juce_graphics.h>
 #include <juce_gui_basics/juce_gui_basics.h>
 #include "PluginProcessor.h"
-#include "SliderWithLabel.h"
+#include "StyleSheet.h"
 #include "SpectrumAnalyzer.h"
 #include "OptionsMenu.h"
 

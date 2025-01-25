@@ -102,7 +102,14 @@ target_sources(SharedCode INTERFACE ${SourceFiles})
 
 # Adds a BinaryData target for embedding assets into the binary
 include(Assets)
-juce_add_binary_data(ByteMarkBinaryData SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/assets/plugin_ui/main_ui.png")
+
+# add assets
+file(GLOB_RECURSE ByteMarkBinaryData
+        RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/assets/**/*"
+)
+
+
 
 # MacOS only: Cleans up folder and target organization on Xcode.
 include(XcodePrettify)
