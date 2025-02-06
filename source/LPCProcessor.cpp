@@ -18,7 +18,164 @@ LPCProcessor::~LPCProcessor() = default;
 //==============================================================================
 void LPCProcessor::setWindowSize (int newSize)
 {
+<<<<<<< Updated upstream
     if (newSize <= 0 || newSize == windowSize)
+=======
+    windowSize = newSize;
+    new (&window) juce::dsp::WindowingFunction<float> (windowSize, juce::dsp::WindowingFunction<float>::hann); // Reconstruct in place
+}
+
+void LPCProcessor::process(const juce::AudioBuffer<float>& inputBuffer, juce::AudioBuffer<float>& outputBuffer) const
+{
+    // this is the processors job, since we want this to be a parameter users can control.
+    //const juce::AudioBuffer<float> resampledBuffer = resampleBuffer(inputBuffer, targetSampleRate);
+
+    const int numSamples = inputBuffer.getNumSamples();
+    const int numChannels = inputBuffer.getNumChannels();
+
+    // process the input
+    for (int channel = 0; channel < numChannels; ++channel)
+    {
+        const float* input = inputBuffer.getReadPointer(channel);
+        float* output = outputBuffer.getWritePointer(channel);
+
+        // Stack the input signal into overlapping windows
+        std::vector<std::vector<float>> stackedData;
+        stackOLA(input, numSamples, stackedData);
+
+        // Prepare buffers for LPC encoding
+        std::vector<std::vector<float>> lpcCoefficients;
+        std::vector<float> signalPower;
+        std::vector<float> pitchFrequencies;
+
+        encodeLPC(stackedData, lpcCoefficients, signalPower, pitchFrequencies);
+
+        // Decode the signal
+        std::vector<std::vector<float>> synthesizedData;
+        decodeLPC(lpcCoefficients, signalPower, pitchFrequencies, stackedData.size(), synthesizedData);
+
+        // Combine overlapping windows back into the output buffer
+        pressStack(synthesizedData, output, numSamples);
+    }
+}
+
+void LPCProcessor::encodeLPC(const std::vector<std::vector<float>>& stackedData,
+                              std::vector<std::vector<float>>& lpcCoefficients,
+                              std::vector<float>& signalPower,
+                              std::vector<float>& pitchFrequencies) const
+{
+    for (const auto& segment : stackedData)
+    {
+        std::vector<float> lpc(lpcOrder, 0.0f);
+        float power = 0.0f;
+
+        // Compute LPC coefficients using auto-correlation
+        computeLpc(segment.data(), segment.size(), lpcOrder, lpc, power);
+        lpcCoefficients.push_back(lpc);
+        signalPower.push_back(power);
+
+        // Perform pitch detection if enabled
+        if (pitchDetectionEnabled)
+        {
+            auto pitchFreq = static_cast<float>(detectPitch(segment));
+            pitchFrequencies.push_back(pitchFreq);
+        }
+        else
+        {
+            pitchFrequencies.push_back(0.0f); // Default to unvoiced
+        }
+    }
+}
+
+void LPCProcessor::decodeLPC(const std::vector<std::vector<float>>& lpcCoefficients,
+                              const std::vector<float>& signalPower,
+                              const std::vector<float>& pitchFrequencies,
+                              const int numSegments,
+                              std::vector<std::vector<float>>& synthesizedData) const
+{
+    for (int i = 0; i < numSegments; ++i)
+    {
+        const auto& lpc = lpcCoefficients[i];
+        const float power = signalPower[i];
+        const float pitchFreq = pitchFrequencies[i];
+
+        // Generate source signal
+        std::vector<float> source(windowSize, 0.0f);
+        if (pitchFreq > 0.0f) // Voiced
+        {
+            const int period = static_cast<int>(1.0f / pitchFreq * sampleRate);
+            for (size_t j = 0; j < source.size(); j += period)
+            {
+                source[j] = static_cast<float>(std::sqrt(period));
+            }
+        }
+        else // Unvoiced
+        {
+            std::ranges::generate (source, []() {
+                static std::mt19937 rng{std::random_device{}()};
+                static std::uniform_real_distribution<float> dist(-1.0f, 1.0f);
+                return dist(rng);
+            });
+        }
+
+        // Filter source through LPC coefficients
+        std::vector<float> synthesizedSegment(windowSize, 0.0f);
+        for (size_t j = 0; j < source.size(); ++j)
+        {
+            synthesizedSegment[j] = source[j] * std::sqrt(power);
+            for (size_t k = 0; k < lpc.size(); ++k)
+            {
+                if (j > k)
+                {
+                    synthesizedSegment[j] -= lpc[k] * synthesizedSegment[j - k - 1];
+                }
+            }
+        }
+        synthesizedData.push_back(synthesizedSegment);
+    }
+}
+
+void LPCProcessor::computeAutocorrelation(const float* input, const int numSamples, const int order, std::vector<float>& autocorrelation)
+{
+    const int fftSize = juce::nextPowerOfTwo(numSamples + order);
+    std::vector<float> fftBuffer(fftSize * 2, 0.0f);
+
+    // Copy input into FFT buffer
+    std::copy_n(input, numSamples, fftBuffer.begin());
+
+    // Perform FFT
+    const juce::dsp::FFT fft(static_cast<int>(std::log2(fftSize)));
+    fft.performRealOnlyForwardTransform(fftBuffer.data());
+
+    // Compute power spectrum (complex multiplication)
+    for (size_t i = 0; i < fftSize; ++i)
+    {
+        const float real = fftBuffer[2 * i];
+        const float imag = fftBuffer[2 * i + 1];
+        fftBuffer[2 * i] = real * real + imag * imag; // Magnitude squared
+        fftBuffer[2 * i + 1] = 0.0f; // Zero imaginary part
+    }
+
+    // Perform inverse FFT
+    fft.performRealOnlyInverseTransform(fftBuffer.data());
+
+    // Extract autocorrelation values
+    autocorrelation.resize(order + 1);
+    for (int i = 0; i <= order; ++i)
+    {
+        autocorrelation[i] = fftBuffer[i] / static_cast<float>(numSamples);
+    }
+}
+
+void LPCProcessor::computeLpc(const float* input, const size_t numSamples, const int order,
+                              std::vector<float>& coefficients, float& power)
+{
+    if (numSamples <= order)
+    {
+        DBG("Insufficient samples for LPC computation!");
+        coefficients.assign(order, 0.0f);
+        power = 0.0f;
+>>>>>>> Stashed changes
         return;
 
     windowSize = newSize;

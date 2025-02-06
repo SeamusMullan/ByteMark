@@ -28,6 +28,7 @@ cmake-build-debug
 cmake-build-release
 cmake-build-relwithdebinfo
 packaging/Output/*
+<<<<<<< Updated upstream
 /.vs
 /Assets.dir
 /Benchmarks.dir
@@ -48,3 +49,10 @@ debug.log
 *.filters
 *.user
 *.lib
+=======
+/build
+/ByteMark_artefacts
+/ByteMark.xcodeproj
+/Debug
+/juce_binarydata_Assets
+>>>>>>> Stashed changes

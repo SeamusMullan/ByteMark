@@ -56,11 +56,23 @@ private:
     /** For each stacked frame, compute LPC + power (+ pitch if enabled). */
     void encodeLPC();
 
+<<<<<<< Updated upstream
     /** For each frame, create an excitation signal & AR-filter it to get final audio. */
     void decodeLPC();
 
     /** Autocorrelation -> reflection coefficients -> LPC (Levinson-Durbin). */
     void computeLpc (const float* windowedData, size_t length, std::vector<float>& lpcOut, float& powerOut);
+=======
+    void decodeLPC (const std::vector<std::vector<float>>& lpcCoefficients,
+        const std::vector<float>& signalPower,
+        const std::vector<float>& pitchFrequencies,
+        int numSegments,
+        std::vector<std::vector<float>>& synthesizedData) const;
+    static void computeAutocorrelation (const float* input, int numSamples, int order, std::vector<float>& autocorrelation);
+
+    static void computeLpc(const float* input, size_t numSamples, int order,
+                    std::vector<float>& coefficients, float& power);
+>>>>>>> Stashed changes
 
     /** Compute the autocorrelation using an FFT-based method (faster for big windowSize). */
     void computeAutocorrelation (const float* data, int length, int order, float* dest);
